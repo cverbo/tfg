@@ -1,6 +1,8 @@
 /target/classes
 /target/maven-archiver
 /target/maven-status
+/target/heroku
+/target/dependency
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
