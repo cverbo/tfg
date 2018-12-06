@@ -1,0 +1,78 @@
+<div>
+    <h1>Series Pro</h1>
+    <div>
+        <form #userForm="ngForm" (ngSubmit)="createUser(userForm)" novalidate>
+            <tr><td>Nombre de usuario: </td><td><input type="text" class="form-control" required
+                [(ngModel)]="newUser.userName" id="userName" placeholder="Nombre de usuario" name="userName"></td></tr>
+            <tr><td>Nombre: </td><td><input type="text" class="form-control" required
+                [(ngModel)]="newUser.firstName" id="firstName" placeholder="Nombre" name="firstName"></td></tr>
+            <tr><td>Apellidos: </td><td><input type="text" class="form-control" required
+                [(ngModel)]="newUser.lastName" id="lastName" placeholder="Apellidos" name="lastName"></td></tr>
+            <tr><td>Fecha de nacimiento: </td><td><input type="text" class="form-control" required
+                [(ngModel)]="newUser.birthdate" id="birthdate" placeholder="Fecha de nacimiento" name="birthdate"></td></tr>
+            <tr><td>E-mail: </td><td><input type="email" class="form-control" required ngModel email
+                [(ngModel)]="newUser.email" id="email" placeholder="E-mail" name="email"></td></tr>
+            <tr><td>Password: </td><td><input type="text" class="form-control" required
+                [(ngModel)]="newUser.password" id="password" placeholder="Password" name="password"></td></tr>
+            <tr><td>Repetir password: </td><td><input type="text" class="form-control" required
+                id="repeatPassoword" placeholder="Repetir password" name="repeatPassoword"></td></tr>
+            <tr><td><button>Guardar</button></td></tr>
+        </form>
+    </div>
+</div>
+
+
+
+
+<!-- <div class="todo-content">
+    <h1 class="page-title">My Todos</h1>
+    <div class="todo-create">
+      <form #userForm="ngForm" (ngSubmit)="createUser(userForm)" novalidate>
+        <input type="text" id="title" class="form-control" placeholder="Type a todo and press enter..." 
+               required
+               name="title" [(ngModel)]="newUser.title"
+               #title="ngModel" >
+        <div *ngIf="title.errors && title.dirty"
+             class="alert alert-danger">
+            <div [hidden]="!title.errors.required">
+              Title is required.
+            </div>
+        </div>
+      </form>
+    </div>
+    <ul class="todo-list">
+      <li *ngFor="let user of users" [class.completed]="user.completed === true" >
+        <div class="todo-row" *ngIf="!editing || editingUser.id != user.id">
+            <a class="todo-completed" (click)="toggleCompleted(user)">
+              <i class="material-icons toggle-completed-checkbox"></i> 
+            </a> 
+            <span class="todo-title">
+              {{user.title}}
+            </span>
+            <span class="todo-actions">
+                <a (click)="editUser(user)">
+                  <i class="material-icons edit">edit</i>
+                </a>
+                <a (click)="deleteUser(user.id)">
+                  <i class="material-icons delete">clear</i>
+                </a>
+            </span>
+        </div>
+        <div class="todo-edit" *ngIf="editing && editingUser.id === user.id">
+            <input class="form-control" type="text" 
+             [(ngModel)]="editingUser.title" required>
+            <span class="edit-actions">
+                <a (click)="updateUser(editingUser)">
+                  <i class="material-icons">done</i>
+                </a>
+                <a (click)="clearEditing()">
+                  <i class="material-icons">clear</i>
+                </a>
+            </span>
+        </div>
+      </li>
+    </ul>
+    <div class="no-todos" *ngIf="users">
+        <p>No Users Found!</p>
+    </div>
+</div> -->
