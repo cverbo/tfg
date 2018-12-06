@@ -1,1 +1,1 @@
-web: node server.js
+web: java $JAVA_OPTS -jar target/*.jar --p $PORT
