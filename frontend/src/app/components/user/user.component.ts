@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UserService } from './user.service';
-import { User } from './user';
+import { UserService } from '../../services/user.service';
+import { User } from '../../models/user';
 import { NgForm, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CustomValidators } from 'ng4-validators';
 
 @Component({
   selector: 'app-series-pro',
@@ -15,7 +16,7 @@ export class UserComponent implements OnInit {
   editingUser: User = new User();
   registerForm: FormGroup;
   submitted = false;
-
+  repeatPassword: string;
 
   constructor(
     private userService: UserService,
@@ -25,11 +26,17 @@ export class UserComponent implements OnInit {
   ngOnInit(): void {
     this.getUsers();
     this.registerForm = this.formBuilder.group({
+            userName: ['', Validators.required],
             firstName: ['', Validators.required],
             lastName: ['', Validators.required],
+            birthdate: ['', CustomValidators.date],
             email: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required, Validators.minLength(6)]]
     });
+  }
+
+  validRepeatPassword(): boolean {
+    return this.newUser.password === this.repeatPassword;
   }
 
   getUsers(): void {

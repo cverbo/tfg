@@ -1,22 +1,42 @@
 <div>
     <h1>Series Pro</h1>
     <div>
-        <form #userForm="ngForm" (ngSubmit)="createUser(userForm)" novalidate>
+        <form #registerForm="ngForm" (ngSubmit)="createUser(registerForm)" novalidate>
             <tr><td>Nombre de usuario: </td><td><input type="text" class="form-control" required
-                [(ngModel)]="newUser.userName" id="userName" placeholder="Nombre de usuario" name="userName"></td></tr>
+                [(ngModel)]="newUser.userName" #userName="ngModel" id="userName" placeholder="Nombre de usuario" name="userName"></td></tr>
+            <tr><td [hidden]="userName.valid || userName.untouched">Nombre de usuario obligatorio</td></tr>
+
             <tr><td>Nombre: </td><td><input type="text" class="form-control" required
-                [(ngModel)]="newUser.firstName" id="firstName" placeholder="Nombre" name="firstName"></td></tr>
+                [(ngModel)]="newUser.firstName" #firstName="ngModel" id="firstName" placeholder="Nombre" name="firstName"></td></tr>
+            <tr><td [hidden]="firstName.valid || firstName.untouched">Nombre obligatorio</td></tr>
+
             <tr><td>Apellidos: </td><td><input type="text" class="form-control" required
-                [(ngModel)]="newUser.lastName" id="lastName" placeholder="Apellidos" name="lastName"></td></tr>
-            <tr><td>Fecha de nacimiento: </td><td><input type="text" class="form-control" required
-                [(ngModel)]="newUser.birthdate" id="birthdate" placeholder="Fecha de nacimiento" name="birthdate"></td></tr>
+                [(ngModel)]="newUser.lastName" #lastName="ngModel" id="lastName" placeholder="Apellidos" name="lastName"></td></tr>
+            <tr><td [hidden]="lastName.valid || lastName.untouched">Apellidos obligatorios</td></tr>
+
+            <tr><td>Fecha de nacimiento: </td><td><input type="date" class="form-control" required
+                [(ngModel)]="newUser.birthdate" #birthdate="ngModel" id="birthdate" placeholder="Fecha de nacimiento" name="birthdate"></td></tr>
+            <tr><td [hidden]="birthdate.valid || birthdate.untouched">Fecha de nacimiento incorrecta.</td></tr>
+
             <tr><td>E-mail: </td><td><input type="email" class="form-control" required ngModel email
-                [(ngModel)]="newUser.email" id="email" placeholder="E-mail" name="email"></td></tr>
+                [(ngModel)]="newUser.email" #email="ngModel" id="email" placeholder="E-mail" name="email"></td></tr>
+            <tr><td [hidden]="email.valid || email.untouched">Email incorrecto.</td></tr>
+
             <tr><td>Password: </td><td><input type="text" class="form-control" required
-                [(ngModel)]="newUser.password" id="password" placeholder="Password" name="password"></td></tr>
+                [(ngModel)]="newUser.password" #password="ngModel" id="password" placeholder="Password" name="password"></td></tr>
+            <tr><td [hidden]="password.valid || password.untouched">El password debe tener al menos 6 caracteres.</td></tr>
+
             <tr><td>Repetir password: </td><td><input type="text" class="form-control" required
-                id="repeatPassoword" placeholder="Repetir password" name="repeatPassoword"></td></tr>
-            <tr><td><button>Guardar</button></td></tr>
+                [(ngModel)]="repeatPassword" id="repeatPassword" placeholder="Repetir password" name="repeatPassword"></td></tr>
+            <!-- <tr><td [hidden]="repeatPassword === password.value || repeatPassword.length === 0">Los passwords introducidos no coinciden.</td></tr> -->
+            <tr><td [hidden]="validRepeatPassword()">Los passwords introducidos no coinciden.</td></tr>
+
+            <tr><td><button [disabled]= "!(registerForm.valid && repeatPassword === password.value)">Guardar</button></td></tr>
+            <!-- <tr><td>password length = {{password.value.length}}</td></tr> -->
+            <!-- <tr><td>repeat password length = {{this.repeatPassword.length}}</td></tr> -->
+            <tr><td>password.valid = {{password.valid}}</td></tr>
+            <tr><td>registerForm.email.$valid = {{email.valid}}</td></tr>
+            <tr><td>registerForm.password.verification = {{repeatPassword === password.value}}</td></tr>
         </form>
     </div>
 </div>
