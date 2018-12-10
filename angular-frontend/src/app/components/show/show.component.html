@@ -1,0 +1,26 @@
+<div *ngIf="loaded | async">
+    <h1>{{ show.name | uppercase }} <small>({{ show.first_air_date | date: 'y'}})</small></h1>
+    <hr>
+
+    <div class="row">
+        <div class="col-md-4 animated fadeIn fast">
+            <img [src]="imgPath.concat(show.poster_path)" class="img-fluid" [alt]="show.name">
+            <br><br>
+            <a [routerLink]="['/recommended']" class="btn btn-outline-danger btn-block">Volver</a>
+
+        </div>
+
+        <div class="col-md-8 animated fadeIn">
+            <h3>{{ show.name }}</h3>
+            <hr>
+            <p>
+                {{ show.overview }}
+            </p>
+            <!-- <div>
+            <img *ngIf="heroe.casa == 'Marvel'" src="assets/img/marvel.png" class="img-logo" alt="Marvel">
+            <img *ngIf="heroe.casa == 'DC'" src="assets/img/dc.png" class="img-logo" alt="DC">
+        </div> -->
+
+        </div>
+    </div>
+</div>
