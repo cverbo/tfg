@@ -3,9 +3,9 @@
     <div class="card-body">
         <h5 class="card-title">{{ show.name }}</h5>
         <p class="card-text">{{ show.overview }}}</p>
-        <p class="card-text"><small class="text-muted">{{ show.first_air_date }}}</small></p>
+        <p class="card-text"><small class="text-muted">{{ show.first_air_date | date: 'shortDate | date: 'ES-es'}}</small></p>
 
-        <button (click)="showShow()" type="button" class="btn btn-outline-primary btn-block"> -->
+        <button (click)="showShow()" type="button" class="btn btn-outline-primary btn-block">
             Ver más...
         </button>
 

@@ -12,7 +12,6 @@ import * as envvars from '../../globals';
 export class ShowComponent  implements OnInit {
 
   show: Show;
-  loaded: Promise<boolean>;
   imgPath = envvars.imgPath;
 
   constructor( private activatedRoute: ActivatedRoute,
@@ -22,8 +21,6 @@ export class ShowComponent  implements OnInit {
     this.activatedRoute.params.subscribe( params => {
       this._showService.getShow( params['id'] )
       .then(show => this.show = show);
-
-      this.loaded = Promise.resolve(true);
     });
 
   }
