@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cverbo.tfg.model.User;
+import com.cverbo.tfg.model.mongo.MongoUser;
 import com.cverbo.tfg.repository.UserRepository;
 
 @RestController
@@ -27,18 +27,18 @@ public class UserController {
     UserRepository userRepository;
 
     @GetMapping("/users")
-    public List<User> getAllUsers() {
+    public List<MongoUser> getAllUsers() {
         Sort sortByCreatedAtDesc = new Sort(Sort.Direction.DESC, "createdAt");
         return userRepository.findAll(sortByCreatedAtDesc);
     }
 
     @PostMapping("/users")
-    public User createUser(@Valid @RequestBody User user) {
+    public MongoUser createUser(@Valid @RequestBody MongoUser user) {
         return userRepository.save(user);
     }
 
     @GetMapping(value="/users/{id}")
-    public ResponseEntity<User> getTodoById(@PathVariable("id") String id) {
+    public ResponseEntity<MongoUser> getTodoById(@PathVariable("id") String id) {
         return userRepository.findById(id)
                 .map(user -> ResponseEntity.ok().body(user))
                 .orElse(ResponseEntity.notFound().build());
@@ -64,5 +64,5 @@ public class UserController {
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.notFound().build());
     }
-	
+    	
 }

@@ -1,6 +1,7 @@
-package com.cverbo.tfg.model;
+package com.cverbo.tfg.model.mongo;
 
 	import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,7 +14,7 @@ import lombok.Setter;
 	@Document(collection="users")
 	@JsonIgnoreProperties(value = {"createdAt"}, allowGetters = true)
 	@Getter @Setter
-	public class User {
+	public class MongoUser {
 	    @Id
 	    private String id;
 
@@ -34,5 +35,11 @@ import lombok.Setter;
 	    private boolean active = true;
 
 	    private Date createdAt = new Date();
+	    
+	    private List<MongoFollowedShow> followedShows;
+	    
+	    private List<MongoViewedEpisode> viewedEpisodes;
+	    
+	    private List<MongoFollowedUser> followedUsers;
 
 }
