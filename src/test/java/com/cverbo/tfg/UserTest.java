@@ -3,6 +3,8 @@ package com.cverbo.tfg;
 import java.util.Arrays;
 import java.util.Date;
 
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +21,43 @@ import com.cverbo.tfg.service.impl.UserServiceImpl;
 public class UserTest {
 	
 	@Autowired
-	UserServiceImpl userServiceImpl;	
+	UserServiceImpl userServiceImpl;
 	
 	@Test
+	public void updateUser_test() {
+		
+		String newFirstName = "Modified";
+		
+		MongoUser user = userServiceImpl.getUser("5c11635a608b891084b7a23a");
+		String currentFirstName = user.getFirstName();
+		System.out.println("Nombre orignal es: " + currentFirstName);
+		user.setFirstName(newFirstName);
+		userServiceImpl.updateUser(user);
+		MongoUser modifiedUser = userServiceImpl.getUser(user.getId());
+		Assert.assertTrue(modifiedUser.getFirstName().equals(newFirstName));
+		System.out.println("Nombre orignal modificado:"  + modifiedUser.getFirstName());
+		
+		user.setFirstName(currentFirstName);
+		userServiceImpl.updateUser(user);
+		MongoUser currentUser = userServiceImpl.getUser(user.getId());
+		Assert.assertTrue(currentUser.getFirstName().equals(currentFirstName));
+		System.out.println("Nombre orignal restaurado: " + currentUser.getFirstName());
+		
+	}
+	
+	@Test
+	@Ignore
+	public void getUser_test() {
+		
+		MongoUser user = userServiceImpl.getUser("5c11635a608b891084b7a23a");
+		Assert.assertFalse(user.getId() == null);
+		
+		System.out.println(user.getFirstName());
+		
+	}
+	
+	@Test
+	@Ignore
 	public void insertUser_test() {
 		
 		MongoUser user = new MongoUser();
