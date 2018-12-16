@@ -1,7 +1,8 @@
 package com.cverbo.tfg;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -11,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.cverbo.tfg.model.Show;
 import com.cverbo.tfg.model.mongo.MongoFollowedShow;
 import com.cverbo.tfg.model.mongo.MongoUser;
-import com.cverbo.tfg.model.mongo.MongoViewedEpisode;
+import com.cverbo.tfg.model.mongo.MongoWatchedEpisode;
+import com.cverbo.tfg.service.impl.ShowServiceImpl;
 import com.cverbo.tfg.service.impl.UserServiceImpl;
 
 @RunWith(SpringRunner.class)
@@ -22,8 +25,12 @@ public class UserTest {
 	
 	@Autowired
 	UserServiceImpl userServiceImpl;
+
+	@Autowired
+	ShowServiceImpl showService;
 	
 	@Test
+	@Ignore
 	public void updateUser_test() {
 		
 		String newFirstName = "Modified";
@@ -32,13 +39,13 @@ public class UserTest {
 		String currentFirstName = user.getFirstName();
 		System.out.println("Nombre orignal es: " + currentFirstName);
 		user.setFirstName(newFirstName);
-		userServiceImpl.updateUser(user);
+		userServiceImpl.updateUser(user.getId(), user);
 		MongoUser modifiedUser = userServiceImpl.getUser(user.getId());
 		Assert.assertTrue(modifiedUser.getFirstName().equals(newFirstName));
 		System.out.println("Nombre orignal modificado:"  + modifiedUser.getFirstName());
 		
 		user.setFirstName(currentFirstName);
-		userServiceImpl.updateUser(user);
+		userServiceImpl.updateUser(user.getId(), user);
 		MongoUser currentUser = userServiceImpl.getUser(user.getId());
 		Assert.assertTrue(currentUser.getFirstName().equals(currentFirstName));
 		System.out.println("Nombre orignal restaurado: " + currentUser.getFirstName());
@@ -57,7 +64,6 @@ public class UserTest {
 	}
 	
 	@Test
-	@Ignore
 	public void insertUser_test() {
 		
 		MongoUser user = new MongoUser();
@@ -70,26 +76,29 @@ public class UserTest {
 		user.setPassword("1111");
 		user.setUserName("carlos.verbo");
 		
-		MongoFollowedShow followedShow = new MongoFollowedShow();
+		List<Show> showList = showService.getRecommended();
+		List<MongoFollowedShow> followedShows = new ArrayList<>();
 		
-		followedShow.setFavorite(false);
-		followedShow.setShowId(44217);
-		followedShow.setShowImgUrl("https://image.tmdb.org/t/p/w500/mBDlsOhNOV1MkNii81aT14EYQ4S.jpg");
-		followedShow.setShowName("Vikings");
+		MongoFollowedShow followedShow;
+		for (Show show : showList) {
+			followedShow = new MongoFollowedShow();
+			followedShow.setFavorite(false);
+			followedShow.setShowId(show.getId());
+			followedShow.setShowImgUrl(show.getPoster_path());
+			followedShow.setShowName(show.getName());
+			followedShows.add(followedShow);
+		}
 		
-		user.setFollowedShows(Arrays.asList(followedShow));
+		user.setFollowedShows(followedShows);
 		
-		MongoViewedEpisode viewedEpisode = new MongoViewedEpisode();
+		MongoWatchedEpisode watchedEpisode = new MongoWatchedEpisode();
 		
-		viewedEpisode.setShowId(44217);
-		viewedEpisode.setSeasonId(1);
-		viewedEpisode.setEpisodeId(892432);
-		
-		
-		
+		watchedEpisode.setShowId(44217);
+		watchedEpisode.setSeasonId(1);
+		watchedEpisode.setEpisodeId(892432);
 		
 		user.setFollowedUsers(null);
-		user.setViewedEpisodes(null);
+		user.setWatchedEpisodes(null);
 		
 		userServiceImpl.insertUser(user);
 		

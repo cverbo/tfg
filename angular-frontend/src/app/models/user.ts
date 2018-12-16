@@ -1,3 +1,6 @@
+import { FollowedShow } from './followedShow';
+import { WatchedEpisode } from './watchedEpisode';
+import { FollowedUser } from './followedUser';
 export class User {
   id: string;
   userName: string;
@@ -8,4 +11,8 @@ export class User {
   birthdate: Date;
   type: string;
   active: boolean;
+  createdAt: Date;
+  followedShows: FollowedShow[];
+  watchedEpisodes: WatchedEpisode[];
+  follwedUsers: FollowedUser[];
 }

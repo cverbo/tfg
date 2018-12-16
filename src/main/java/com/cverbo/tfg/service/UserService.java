@@ -3,7 +3,7 @@ package com.cverbo.tfg.service;
 import com.cverbo.tfg.model.mongo.MongoFollowedShow;
 import com.cverbo.tfg.model.mongo.MongoFollowedUser;
 import com.cverbo.tfg.model.mongo.MongoUser;
-import com.cverbo.tfg.model.mongo.MongoViewedEpisode;
+import com.cverbo.tfg.model.mongo.MongoWatchedEpisode;
 
 public interface UserService {
 
@@ -11,7 +11,7 @@ public interface UserService {
 	
 	MongoUser getUser(String userId);
 	
-	MongoUser updateUser(MongoUser user);
+	MongoUser updateUser(String userId, MongoUser user);
 	
 	MongoUser inactiveUser(String userId);
 	
@@ -19,7 +19,7 @@ public interface UserService {
 	
 	MongoUser markShowAsFavorite(String userId, int showId);
 	
-	MongoUser addViewedEpisode(String userId, int showId, MongoViewedEpisode episode);
+	MongoUser addWatchedEpisode(String userId, int showId, MongoWatchedEpisode episode);
 	
 	MongoUser addFollowedUser(String userId, MongoFollowedUser followedUser);
 	

@@ -1,8 +1,7 @@
-<div class="jumbotron jumbotron-fluid animated fadeIn fast">
+<h1>Tus series <small>seguidas</small></h1>
+<hr>
+<div *ngIf="user" class="card-columns">
 
-    <div class="container">
-        <h1 class="display-4">Series Pro</h1>
-        <p class="lead">Bienvendio a Series Pro.</p>
-    </div>
+    <app-show-card [showId]="followedShow.showId" *ngFor="let followedShow of user.followedShows"></app-show-card>
 
 </div>

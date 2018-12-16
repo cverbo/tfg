@@ -8,6 +8,13 @@ export class UserService {
 
   constructor(private http: Http) { }
 
+  getUser(id: string):  Promise<User> {
+    return this.http.get(this.baseUrl + '/api/users/' + id)
+      .toPromise()
+      .then(response => response.json() as User)
+      .catch(this.handleError);
+  }
+
   getUsers():  Promise<User[]> {
     return this.http.get(this.baseUrl + '/api/users/')
       .toPromise()

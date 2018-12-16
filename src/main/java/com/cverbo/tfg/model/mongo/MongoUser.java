@@ -38,7 +38,7 @@ import lombok.Setter;
 	    
 	    private List<MongoFollowedShow> followedShows;
 	    
-	    private List<MongoViewedEpisode> viewedEpisodes;
+	    private List<MongoWatchedEpisode> watchedEpisodes;
 	    
 	    private List<MongoFollowedUser> followedUsers;
 
