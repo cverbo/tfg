@@ -5,9 +5,7 @@ import * as envvars from '../globals';
 
 @Injectable()
 export class ShowService {
-    constructor( private http: Http ) {
-        console.log('Servicio listo para usar!!');
-    }
+    constructor( private http: Http ) { }
 
     private baseUrl = envvars.baseUrl;
 

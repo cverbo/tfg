@@ -1,0 +1,13 @@
+<div *ngIf="episode" class="card animated fadeIn fast">
+    <img class="card-img-top" [src]="imgPath.concat(episode.still_path)" [alt]="episode.name">
+    <div class="card-body">
+        <h5 class="card-title">{{ seasonNumber + 'x' + episodeNumber + ' - ' + episode.name }}</h5>
+        <p class="card-text">{{ episode.overview }}</p>
+        <p class="card-text"><small class="text-muted">{{ episode.air_date | date: 'shortDate' }}</small></p>
+
+        <button (click)="showEpisode()" type="button" class="btn btn-outline-primary btn-block">
+          Ver más...
+      </button>
+
+    </div>
+</div>

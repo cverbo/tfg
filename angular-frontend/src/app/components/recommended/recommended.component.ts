@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RecommendedService } from '../../services/recommended.service';
 import { Show } from '../../models/show';
-
 import { Router } from '@angular/router';
 
 @Component({

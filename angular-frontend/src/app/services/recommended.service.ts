@@ -5,13 +5,9 @@ import * as envvars from '../globals';
 
 @Injectable()
 export class RecommendedService {
-    constructor( private http: Http ) {
-        console.log('Servicio listo para usar!!');
-    }
+    constructor( private http: Http ) { }
 
     private baseUrl = envvars.baseUrl;
-
-    private shows: Show[];
 
     public getShows(): Promise<Show[]> {
         return this.http.get(this.baseUrl + '/api/recommended/')

@@ -4,7 +4,6 @@ import { Show } from '../../models/show';
 import { ShowService } from '../../services/show.service';
 import * as envvars from '../../globals';
 
-
 @Component({
   selector: 'app-show',
   templateUrl: './show.component.html'

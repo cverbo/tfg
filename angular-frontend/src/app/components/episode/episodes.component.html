@@ -1,0 +1,7 @@
+<h1>Recomendado <small>para ti</small></h1>
+<hr>
+<div *ngIf="episodes" class="card-columns">
+
+    <app-episode-card [episodeNumber]="episode.episode_number" *ngFor="let episode of episodes"></app-episode-card>
+
+</div>
