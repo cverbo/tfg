@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cverbo.tfg.model.Episode;
 import com.cverbo.tfg.model.Show;
 import com.cverbo.tfg.repository.impl.ShowRepositoryImpl;
 
@@ -28,6 +29,16 @@ public class ShowControler {
 	@GetMapping(value="/show/{id}")
     public Show getShow(@PathVariable("id") Integer showId) {
         return showRepository.getShow(showId);
+    }
+	
+	@GetMapping(value="/show/{id}/season/{season_number}")
+    public List<Episode> getEpisodes(@PathVariable("id") Integer showId, @PathVariable("season_number") Integer seasonNumber) {
+        return showRepository.getEpisodes(showId, seasonNumber);
+    }
+	
+	@GetMapping(value="/show/{id}/season/{season_number}/episode/{episode_number}")
+    public Episode getEpisode(@PathVariable("id") Integer showId, @PathVariable("season_number") Integer seasonNumber, @PathVariable("episode_number") Integer episodeNumber) {
+        return showRepository.getEpisode(showId, seasonNumber, episodeNumber);
     }
 
 }

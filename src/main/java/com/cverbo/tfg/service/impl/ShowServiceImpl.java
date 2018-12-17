@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cverbo.tfg.model.Episode;
 import com.cverbo.tfg.model.Show;
 import com.cverbo.tfg.repository.impl.ShowRepositoryImpl;
 import com.cverbo.tfg.service.ShowService;
@@ -23,6 +24,16 @@ public class ShowServiceImpl implements ShowService {
 	@Override
 	public Show getShow(Integer showId) {
 		return showRepository.getShow(showId);
+	}
+
+	@Override
+	public List<Episode> getEpisodes(Integer showId, Integer seasonNumber) {
+		return showRepository.getEpisodes(showId, seasonNumber);
+	}
+
+	@Override
+	public Episode getEpisode(Integer showId, Integer seasonNumber, Integer episodeNumber) {
+		return showRepository.getEpisode(showId, seasonNumber, episodeNumber);
 	}
 	
 }

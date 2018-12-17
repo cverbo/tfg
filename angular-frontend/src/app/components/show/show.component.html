@@ -5,7 +5,9 @@
     <div class="col-md-4 animated fadeIn fast">
         <img [src]="imgPath.concat(show.poster_path)" class="img-fluid" [alt]="show.name">
         <br><br>
-        <a [routerLink]="['/recommended']" class="btn btn-outline-danger btn-block">Volver</a>
+        <a [routerLink]="['/recommended']" class="btn btn-outline-danger btn-block">Volver a recomendadas</a>
+        <a [routerLink]="['/home']" class="btn btn-outline-danger btn-block">Volver a seguidas</a>
+        <a [routerLink]="['/episodes', show.id]" class="btn btn-outline-danger btn-block">Capítulos</a>
 
     </div>
 

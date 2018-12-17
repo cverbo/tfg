@@ -23,6 +23,10 @@ import { RecommendedComponent } from './components/recommended/recommended.compo
 import { RecommendedCardComponent } from './components/recommended/recommended-card/recommended-card.component';
 import { ShowComponent } from './components/show/show.component';
 import { ShowService } from './services/show.service';
+import { ShowCardComponent } from './components/show/show-card/show-card.component';
+import { EpisodesComponent } from './components/episode/episodes.component';
+import { EpisodeCardComponent } from './components/episode/episode-card/episode-card.component';
+import { EpisodeService } from './services/episode.service';
 
 @NgModule({
   declarations: [
@@ -34,7 +38,10 @@ import { ShowService } from './services/show.service';
     FooterComponent,
     RecommendedComponent,
     RecommendedCardComponent,
-    ShowComponent
+    ShowComponent,
+    ShowCardComponent,
+    EpisodesComponent,
+    EpisodeCardComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +53,8 @@ import { ShowService } from './services/show.service';
   providers: [
     UserService,
     RecommendedService,
-    ShowService
+    ShowService,
+    EpisodeService
   ],
   bootstrap: [AppComponent]
 })

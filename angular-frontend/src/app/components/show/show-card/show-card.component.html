@@ -1,0 +1,13 @@
+<div *ngIf="show" class="card animated fadeIn fast">
+    <img class="card-img-top" [src]="imgPath.concat(show.poster_path)" [alt]="show.name">
+    <div class="card-body">
+        <h5 class="card-title">{{ show.name }}</h5>
+        <p class="card-text">{{ show.overview }}</p>
+        <p class="card-text"><small class="text-muted">{{ show.first_air_date | date: 'shortDate' }}</small></p>
+
+        <button (click)="showShow()" type="button" class="btn btn-outline-primary btn-block">
+          Ver más...
+        </button>
+
+    </div>
+</div>

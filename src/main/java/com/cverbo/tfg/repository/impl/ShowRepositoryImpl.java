@@ -11,6 +11,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import com.cverbo.tfg.model.Episode;
+import com.cverbo.tfg.model.EpisodeResult;
 import com.cverbo.tfg.model.Show;
 import com.cverbo.tfg.model.ShowResult;
 import com.cverbo.tfg.repository.ShowRepository;
@@ -82,15 +84,76 @@ public class ShowRepositoryImpl implements ShowRepository {
 			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-			Show showResult = objectMapper.readValue(br, Show.class);
-			
-			show = showResult;
+			show = objectMapper.readValue(br, Show.class);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 		return show;
+	}
+
+	@Override
+	public List<Episode> getEpisodes(Integer showId, Integer seasonNumber) {
+
+		List<Episode> episodeList = new ArrayList<>();
+		
+		try {
+			URL url = new URL(baseUrl + "tv/" + showId + "/season/" + seasonNumber + "?" + apiKey + baseLang);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json");
+			conn.connect();
+			
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+			}
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+			EpisodeResult episodeResult = objectMapper.readValue(br, EpisodeResult.class);
+			
+			episodeList = episodeResult.getEpisodes();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return episodeList;
+	}
+
+	@Override
+	public Episode getEpisode(Integer showId, Integer seasonNumber, Integer episodeNumber) {
+
+		Episode episode = new Episode();
+		
+		try {
+			URL url = new URL(baseUrl + "tv/" + showId + "/season/" + seasonNumber + "/episode/" + episodeNumber + "?" + apiKey + baseLang);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json");
+			conn.connect();
+			
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+			}
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+			episode = objectMapper.readValue(br, Episode.class);
+			
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return episode;
 	}
 	
 }
