@@ -42,7 +42,7 @@ public class ShowRepositoryImpl implements ShowRepository {
 	@Override
 	public List<Show> getRecommended(String userId) {
 		
-		//Recoger un id de serie al azar para devolver las recomendanciones
+		//Recoger un id de serie al azar para devolver las recomendanciones 
 		Random random = new Random();
 		MongoUser user = userService.getUser(userId);
 		List<Integer> followedShowsIdList = new ArrayList<>();
