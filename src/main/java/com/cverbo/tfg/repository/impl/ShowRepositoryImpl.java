@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -51,8 +52,9 @@ public class ShowRepositoryImpl implements ShowRepository {
 		}
 		int randomFollowedShowId = followedShowsIdList.get(random.nextInt(followedShowsIdList.size()));
 		
-		List<Show> showList = new ArrayList<>();
+		List<Show> showList = new LinkedList<>();
 		showList.add(this.getShow(randomFollowedShowId));
+		System.out.println(this.getShow(randomFollowedShowId).getName());
 		
 		try {
 			URL url = new URL(baseUrl + "tv/" + randomFollowedShowId + "/recommendations?page=1&" + apiKey + baseLang);
