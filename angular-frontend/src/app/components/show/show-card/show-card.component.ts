@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Show } from '../../../models/show';
 import * as envvars from '../../../globals';
 import { ShowService } from '../../../services/show.service';
+import { User } from '../../../models/user';
 
 @Component({
   selector: 'app-show-card',
@@ -10,6 +11,7 @@ import { ShowService } from '../../../services/show.service';
 })
 export class ShowCardComponent implements OnInit {
 
+  @Input() user: User;
   @Input() showId: number;
   @Output() showSelected: EventEmitter<number>;
   imgPath = envvars.imgPath;
@@ -30,7 +32,7 @@ export class ShowCardComponent implements OnInit {
   }
 
   showShow() {
-    this.router.navigate( ['/show', this.showId] );
+    this.router.navigate( ['/show', this.showId]);
   }
 
 }

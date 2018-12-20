@@ -7,11 +7,13 @@ import com.cverbo.tfg.model.Show;
 
 public interface ShowService {
 
-	public List<Show> getRecommended();
+	public List<Show> getRecommended(String userId);
 	
 	public Show getShow(Integer showId);
 	
 	public List<Episode> getEpisodes(Integer showId, Integer seasonNumber);
+	
+	public List<Episode> getEpisodesAllSeasons(Integer showId);
 
 	public Episode getEpisode(Integer showId, Integer seasonNumber, Integer episodeNumber);
 	

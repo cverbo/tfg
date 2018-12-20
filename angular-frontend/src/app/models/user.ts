@@ -1,6 +1,7 @@
 import { FollowedShow } from './followedShow';
 import { WatchedEpisode } from './watchedEpisode';
 import { FollowedUser } from './followedUser';
+
 export class User {
   id: string;
   userName: string;

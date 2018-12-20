@@ -8,6 +8,8 @@ import lombok.Setter;
 @Getter @Setter
 public class Episode {
 	
+	private int show_id;
+	
 	private int id;
 	
 	private int episode_number;

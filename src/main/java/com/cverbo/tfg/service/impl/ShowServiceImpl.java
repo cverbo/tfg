@@ -17,8 +17,8 @@ public class ShowServiceImpl implements ShowService {
 	ShowRepositoryImpl showRepository;
 	
 	@Override
-	public List<Show> getRecommended() {
-		return showRepository.getRecommended();
+	public List<Show> getRecommended(String userId) {
+		return showRepository.getRecommended(userId);
 	}
 
 	@Override
@@ -29,6 +29,11 @@ public class ShowServiceImpl implements ShowService {
 	@Override
 	public List<Episode> getEpisodes(Integer showId, Integer seasonNumber) {
 		return showRepository.getEpisodes(showId, seasonNumber);
+	}
+
+	@Override
+	public List<Episode> getEpisodesAllSeasons(Integer showId) {
+		return showRepository.getEpisodesAllSeasons(showId);
 	}
 
 	@Override

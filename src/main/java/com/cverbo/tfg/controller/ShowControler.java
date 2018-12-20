@@ -21,9 +21,9 @@ public class ShowControler {
 	@Autowired
 	ShowRepositoryImpl showRepository;
 	
-	@GetMapping("/recommended")
-    public List<Show> getRecommended() {
-        return showRepository.getRecommended();
+	@GetMapping("/recommended/{id}")
+    public List<Show> getRecommended(@PathVariable("id") String userId) {
+        return showRepository.getRecommended(userId);
     }
 	
 	@GetMapping(value="/show/{id}")
@@ -31,9 +31,14 @@ public class ShowControler {
         return showRepository.getShow(showId);
     }
 	
-	@GetMapping(value="/show/{id}/season/{season_number}")
+	@GetMapping(value="/show/{id}/episodes/{season_number}")
     public List<Episode> getEpisodes(@PathVariable("id") Integer showId, @PathVariable("season_number") Integer seasonNumber) {
         return showRepository.getEpisodes(showId, seasonNumber);
+    }
+	
+	@GetMapping(value="/show/{id}/episodes")
+    public List<Episode> getEpisodesAllSeasons(@PathVariable("id") Integer showId) {
+        return showRepository.getEpisodesAllSeasons(showId);
     }
 	
 	@GetMapping(value="/show/{id}/season/{season_number}/episode/{episode_number}")

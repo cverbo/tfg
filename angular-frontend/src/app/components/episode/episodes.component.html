@@ -1,7 +1,12 @@
-<h1>Recomendado <small>para ti</small></h1>
+<h1 *ngIf="show"><small>Capítulos de</small> {{ show.name }}
+    <img [src]="imgPath.concat(show.poster_path)" class="img-fluid img-header" [alt]="show.name">
+</h1>
 <hr>
-<div *ngIf="episodes" class="card-columns">
 
-    <app-episode-card [episodeNumber]="episode.episode_number" *ngFor="let episode of episodes"></app-episode-card>
-
+<div *ngIf="episodes" class="list-group">
+    <a (click)="markEpisodeAsWatched(episode.show_id, episode.season_number, episode.episode_number)" style="cursor: pointer;" *ngFor="let episode of episodes" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        {{ episode.season_number + 'x' + episode.episode_number + ' - ' + episode.name }}
+        <span *ngIf="viewedEpisode(episode.show_id, episode.season_number, episode.episode_number)" class="badge badge-success badge-pill">Visto</span>
+        <span *ngIf="!viewedEpisode(episode.show_id, episode.season_number, episode.episode_number)" class="badge badge-danger badge-pill">Pdte.</span>
+    </a>
 </div>

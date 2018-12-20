@@ -1,7 +1,8 @@
-<h1>Recomendado <small>para ti</small></h1>
+<h1 *ngIf="show"><small>Porque sigues </small>{{ show.name }}</h1>
 <hr>
-<div class="card-columns">
+<div *ngIf="shows" class="card-columns">
 
-    <app-recommended-card [show]="show" *ngFor="let show of shows"></app-recommended-card>
+    <!-- <app-recommended-card [show]="show" *ngFor="let show of shows"></app-recommended-card> -->
+    <app-show-card [showId]="show.id" *ngFor="let show of shows"></app-show-card>
 
 </div>

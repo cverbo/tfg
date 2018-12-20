@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 // Rutas
 import { APP_ROUTING } from './app.routes';
@@ -10,7 +11,6 @@ import { APP_ROUTING } from './app.routes';
 // Servicios
 import { UserService} from './services/user.service';
 import { RecommendedService } from './services/recommended.service';
-
 
 // Componentes
 import { AppComponent } from './app.component';
@@ -27,6 +27,7 @@ import { ShowCardComponent } from './components/show/show-card/show-card.compone
 import { EpisodesComponent } from './components/episode/episodes.component';
 import { EpisodeCardComponent } from './components/episode/episode-card/episode-card.component';
 import { EpisodeService } from './services/episode.service';
+import { Data } from './services/data.service';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,9 @@ import { EpisodeService } from './services/episode.service';
     UserService,
     RecommendedService,
     ShowService,
-    EpisodeService
+    EpisodeService,
+    {provide: LocationStrategy, useClass: HashLocationStrategy},
+    Data
   ],
   bootstrap: [AppComponent]
 })

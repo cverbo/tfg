@@ -76,7 +76,7 @@ public class UserTest {
 		user.setPassword("1111");
 		user.setUserName("carlos.verbo");
 		
-		List<Show> showList = showService.getRecommended();
+		List<Show> showList = showService.getRecommended("5c14f902608b892548c1bfa0");
 		List<MongoFollowedShow> followedShows = new ArrayList<>();
 		
 		MongoFollowedShow followedShow;
@@ -94,8 +94,8 @@ public class UserTest {
 		MongoWatchedEpisode watchedEpisode = new MongoWatchedEpisode();
 		
 		watchedEpisode.setShowId(44217);
-		watchedEpisode.setSeasonId(1);
-		watchedEpisode.setEpisodeId(892432);
+		watchedEpisode.setSeasonNumber(1);
+		watchedEpisode.setEpisodeNumber(1);
 		
 		user.setFollowedUsers(null);
 		user.setWatchedEpisodes(null);

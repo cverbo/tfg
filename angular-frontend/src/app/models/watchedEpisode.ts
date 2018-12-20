@@ -1,7 +1,7 @@
 export class WatchedEpisode {
 
     showId: number;
-    seasonId: number;
-    episodeId: number;
+    seasonNumber: number;
+    episodeNumber: number;
 
 }

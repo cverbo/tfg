@@ -17,5 +17,7 @@ public class Show {
 	private String overview;
 	
 	private String poster_path;
+	
+	private int number_of_seasons;
 
 }

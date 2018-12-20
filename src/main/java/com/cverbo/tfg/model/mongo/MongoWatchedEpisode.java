@@ -8,8 +8,8 @@ public class MongoWatchedEpisode {
 
 	private int showId;
 	
-	private int seasonId;
+	private int seasonNumber;
 	
-	private int episodeId;
+	private int episodeNumber;
 	
 }
