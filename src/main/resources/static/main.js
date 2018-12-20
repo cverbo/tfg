@@ -99,6 +99,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_episode_episode_card_episode_card_component__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/episode/episode-card/episode-card.component */ "./src/app/components/episode/episode-card/episode-card.component.ts");
 /* harmony import */ var _services_episode_service__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./services/episode.service */ "./src/app/services/episode.service.ts");
 /* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./services/data.service */ "./src/app/services/data.service.ts");
+/* harmony import */ var _components_show_show_search_show_search_component__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./components/show/show-search/show-search.component */ "./src/app/components/show/show-search/show-search.component.ts");
 
 
 
@@ -112,6 +113,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // Componentes
+
 
 
 
@@ -144,7 +146,8 @@ var AppModule = /** @class */ (function () {
                 _components_show_show_component__WEBPACK_IMPORTED_MODULE_17__["ShowComponent"],
                 _components_show_show_card_show_card_component__WEBPACK_IMPORTED_MODULE_19__["ShowCardComponent"],
                 _components_episode_episodes_component__WEBPACK_IMPORTED_MODULE_20__["EpisodesComponent"],
-                _components_episode_episode_card_episode_card_component__WEBPACK_IMPORTED_MODULE_21__["EpisodeCardComponent"]
+                _components_episode_episode_card_episode_card_component__WEBPACK_IMPORTED_MODULE_21__["EpisodeCardComponent"],
+                _components_show_show_search_show_search_component__WEBPACK_IMPORTED_MODULE_24__["ShowSearchComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -187,6 +190,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_recommended_recommended_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/recommended/recommended.component */ "./src/app/components/recommended/recommended.component.ts");
 /* harmony import */ var _components_show_show_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/show/show.component */ "./src/app/components/show/show.component.ts");
 /* harmony import */ var _components_episode_episodes_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/episode/episodes.component */ "./src/app/components/episode/episodes.component.ts");
+/* harmony import */ var _components_show_show_search_show_search_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/show/show-search/show-search.component */ "./src/app/components/show/show-search/show-search.component.ts");
+
 
 
 
@@ -199,6 +204,7 @@ var APP_ROUTES = [
     { path: 'recommended', component: _components_recommended_recommended_component__WEBPACK_IMPORTED_MODULE_3__["RecommendedComponent"] },
     { path: 'show/:id', component: _components_show_show_component__WEBPACK_IMPORTED_MODULE_4__["ShowComponent"] },
     { path: 'episodes/:id', component: _components_episode_episodes_component__WEBPACK_IMPORTED_MODULE_5__["EpisodesComponent"] },
+    { path: 'show-search/:text', component: _components_show_show_search_show_search_component__WEBPACK_IMPORTED_MODULE_6__["ShowSearchComponent"] },
     { path: '**', pathMatch: 'full', redirectTo: 'home' }
 ];
 var APP_ROUTING = _angular_router__WEBPACK_IMPORTED_MODULE_0__["RouterModule"].forRoot(APP_ROUTES);
@@ -399,6 +405,7 @@ var EpisodesComponent = /** @class */ (function () {
         }
         if (!watched) {
             this.episodesService.markEpisodeAsWatched(showId, seasonNumber, episodeNumber, this.user);
+            this.data.user = this.user;
         }
     };
     EpisodesComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -425,7 +432,7 @@ var EpisodesComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h1>Tus series <small>seguidas</small></h1>\n<hr>\n<div *ngIf=\"user\" class=\"card-columns\">\n    <app-show-card [showId]=\"followedShow.showId\" *ngFor=\"let followedShow of user.followedShows\"></app-show-card>\n\n</div>"
+module.exports = "<h1>Tus series <small>seguidas</small></h1>\n<hr>\n<div *ngIf=\"user\" class=\"card-columns\">\n    <app-show-card [origin]=\"'home'\" [showId]=\"followedShow.showId\" *ngFor=\"let followedShow of user.followedShows\"></app-show-card>\n\n</div>"
 
 /***/ }),
 
@@ -448,13 +455,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var HomeComponent = /** @class */ (function () {
-    function HomeComponent(_userService, data) {
-        this._userService = _userService;
+    function HomeComponent(userService, data) {
+        this.userService = userService;
         this.data = data;
     }
     HomeComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this._userService.getUser('5c14f902608b892548c1bfa0')
+        this.userService.getUser('5c14f902608b892548c1bfa0')
             .then(function (user) { return _this.user = user; });
     };
     HomeComponent.prototype.ngOnDestroy = function () {
@@ -546,7 +553,7 @@ var RecommendedCardComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h1 *ngIf=\"show\"><small>Porque sigues </small>{{ show.name }}</h1>\n<hr>\n<div *ngIf=\"shows\" class=\"card-columns\">\n\n    <!-- <app-recommended-card [show]=\"show\" *ngFor=\"let show of shows\"></app-recommended-card> -->\n    <app-show-card [showId]=\"show.id\" *ngFor=\"let show of shows\"></app-show-card>\n\n</div>"
+module.exports = "<h1 *ngIf=\"show\"><small>Porque sigues </small>{{ show.name }}</h1>\n<hr>\n<div *ngIf=\"shows\" class=\"card-columns\">\n\n    <app-show-card [origin]=\"'recommended'\" [showId]=\"show.id\" *ngFor=\"let show of shows\"></app-show-card>\n\n</div>"
 
 /***/ }),
 
@@ -659,7 +666,7 @@ var FooterComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark\">\n    <a class=\"navbar-brand\" href=\"#\">\n        <img src=\"assets/img/icon.png\" width=\"30\" height=\"30\" alt=\"\" />\n    </a>\n\n    <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarSupportedContent\" aria-controls=\"navbarSupportedContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n\n    <div class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\">\n        <ul class=\"navbar-nav mr-auto\">\n            <li class=\"nav-item\" routerLinkActive=\"active\">\n                <a class=\"nav-link\" [routerLink]=\"['home']\">Mis Series</a>\n            </li>\n            <li class=\"nav-item\" routerLinkActive=\"active\">\n                <a class=\"nav-link\" [routerLink]=\"['recommended']\">Recomendadas</a>\n            </li>\n            <li class=\"nav-item\" routerLinkActive=\"active\">\n                <a class=\"nav-link\" [routerLink]=\"['about']\">About</a>\n            </li>\n            <li class=\"nav-item dropdown\">\n                <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\n          Dropdown\n        </a>\n                <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown\">\n                    <a class=\"dropdown-item\" href=\"#\">Action</a>\n                    <a class=\"dropdown-item\" href=\"#\">Another action</a>\n                    <div class=\"dropdown-divider\"></div>\n                    <a class=\"dropdown-item\" href=\"#\">Something else here</a>\n                </div>\n            </li>\n        </ul>\n\n        <!--\n      <div class=\"form-inline my-2 my-lg-0\">\n          <input class=\"form-control mr-sm-2\" type=\"text\" placeholder=\"Buscar héroe\" aria-label=\"Buscar héroe\" (keyup.enter)=\"buscarHeroe(buscarTexto.value)\" #buscarTexto>\n          <button (click)=\"buscarHeroe(buscarTexto.value)\" class=\"btn btn-outline-primary my-2 my-sm-0\" type=\"button\">Buscar</button>\n      </div>\n    -->\n    </div>\n</nav>"
+module.exports = "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark\">\n    <a class=\"navbar-brand\" href=\"#\">\n        <img src=\"assets/img/icon.png\" width=\"30\" height=\"30\" alt=\"\" />\n    </a>\n\n    <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarSupportedContent\" aria-controls=\"navbarSupportedContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n\n    <div class=\"collapse navbar-collapse\" id=\"navbarSupportedContent\">\n        <ul class=\"navbar-nav mr-auto\">\n            <li class=\"nav-item\" routerLinkActive=\"active\">\n                <a class=\"nav-link\" [routerLink]=\"['home']\">Mis Series</a>\n            </li>\n            <li class=\"nav-item\" routerLinkActive=\"active\">\n                <a class=\"nav-link\" [routerLink]=\"['recommended']\">Recomendadas</a>\n            </li>\n            <li class=\"nav-item\" routerLinkActive=\"active\">\n                <a class=\"nav-link\" [routerLink]=\"['about']\">About</a>\n            </li>\n        </ul>\n        <div class=\"form-inline my-2 my-lg-0\">\n            <input class=\"form-control mr-sm-2\" type=\"text\" placeholder=\"Buscar serie\" (keyup.enter)=\"searchShow(searchText.value)\" aria-label=\"Buscar serie\" #searchText>\n            <button (click)=\"searchShow(searchText.value)\" class=\"btn btn-outline-primary my-2 my-sm-0\" type=\"button\">Buscar</button>\n        </div>\n\n\n    </div>\n</nav>"
 
 /***/ }),
 
@@ -685,8 +692,8 @@ var NavbarComponent = /** @class */ (function () {
     }
     NavbarComponent.prototype.ngOnInit = function () {
     };
-    NavbarComponent.prototype.buscarHeroe = function (termino) {
-        this.router.navigate(['/heroes-busqueda', termino]);
+    NavbarComponent.prototype.searchShow = function (text) {
+        this.router.navigate(['/show-search', text]);
     };
     NavbarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -709,7 +716,7 @@ var NavbarComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"show\" class=\"card animated fadeIn fast\">\n    <img class=\"card-img-top\" [src]=\"imgPath.concat(show.poster_path)\" [alt]=\"show.name\">\n    <div class=\"card-body\">\n        <h5 class=\"card-title\">{{ show.name }}</h5>\n        <p class=\"card-text\">{{ show.overview }}</p>\n        <p class=\"card-text\"><small class=\"text-muted\">{{ show.first_air_date | date: 'shortDate' }}</small></p>\n\n        <button (click)=\"showShow()\" type=\"button\" class=\"btn btn-outline-primary btn-block\">\n          Ver más...\n        </button>\n\n    </div>\n</div>"
+module.exports = "<div *ngIf=\"show\" class=\"card animated fadeIn fast\">\n    <img *ngIf=\"show.poster_path != null\" class=\"card-img-top\" [src]=\"imgPath.concat(show.poster_path)\" [alt]=\"show.name\">\n    <img *ngIf=\"show.poster_path === null\" class=\"card-img-top\" [src]=\"defaultImgPath\" [alt]=\"show.name\">\n    <div class=\"card-body\">\n        <h5 class=\"card-title\">{{ show.name }}</h5>\n        <p class=\"card-text\">{{ show.overview }}</p>\n        <p class=\"card-text\"><small class=\"text-muted\">{{ show.first_air_date | date: 'shortDate' }}</small></p>\n\n        <button *ngIf=\"origin==='home'\" (click)=\"showShow()\" type=\"button\" class=\"btn btn-outline-primary btn-block\">\n            Ver más...\n        </button>\n        <button *ngIf=\"(origin==='recommended' || origin==='search') && !followed\" (click)=\"followShow()\" type=\"button\" class=\"btn btn-outline-primary btn-block\">\n            Seguir serie\n        </button>\n        <button *ngIf=\"origin==='recommended' && followed\" type=\"button\" class=\"btn btn-success btn-block disabled\">\n            Siguiendo\n        </button>\n\n    </div>\n</div>"
 
 /***/ }),
 
@@ -728,7 +735,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../globals */ "./src/app/globals.ts");
 /* harmony import */ var _services_show_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/show.service */ "./src/app/services/show.service.ts");
-/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../models/user */ "./src/app/models/user.ts");
+/* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../services/data.service */ "./src/app/services/data.service.ts");
 
 
 
@@ -736,31 +743,40 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var ShowCardComponent = /** @class */ (function () {
-    function ShowCardComponent(router, _showService) {
+    function ShowCardComponent(router, showService, data) {
         this.router = router;
-        this._showService = _showService;
+        this.showService = showService;
+        this.data = data;
         this.imgPath = _globals__WEBPACK_IMPORTED_MODULE_3__["imgPath"];
+        this.defaultImgPath = _globals__WEBPACK_IMPORTED_MODULE_3__["defaultImgPath"];
+        this.followed = false;
         this.showSelected = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
     }
     ShowCardComponent.prototype.ngOnInit = function () {
         this.getShow();
+        this.user = this.data.user;
     };
     ShowCardComponent.prototype.getShow = function () {
         var _this = this;
-        this._showService.getShow(this.showId)
+        this.showService.getShow(this.showId)
             .then(function (show) { return _this.show = show; });
     };
     ShowCardComponent.prototype.showShow = function () {
         this.router.navigate(['/show', this.showId]);
     };
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _models_user__WEBPACK_IMPORTED_MODULE_5__["User"])
-    ], ShowCardComponent.prototype, "user", void 0);
+    ShowCardComponent.prototype.followShow = function () {
+        this.showService.followShow(this.show, this.user);
+        this.followed = true;
+        this.data.user = this.user;
+    };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Number)
     ], ShowCardComponent.prototype, "showId", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])(),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", String)
+    ], ShowCardComponent.prototype, "origin", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"])
@@ -771,9 +787,78 @@ var ShowCardComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./show-card.component.html */ "./src/app/components/show/show-card/show-card.component.html")
         }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"],
-            _services_show_service__WEBPACK_IMPORTED_MODULE_4__["ShowService"]])
+            _services_show_service__WEBPACK_IMPORTED_MODULE_4__["ShowService"],
+            _services_data_service__WEBPACK_IMPORTED_MODULE_5__["Data"]])
     ], ShowCardComponent);
     return ShowCardComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/components/show/show-search/show-search.component.html":
+/*!************************************************************************!*\
+  !*** ./src/app/components/show/show-search/show-search.component.html ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<h1><small>Buscando </small>{{ this.text }}</h1>\n<hr>\n<div *ngIf=\"shows\" class=\"card-columns\">\n\n    <app-show-card [origin]=\"'search'\" [showId]=\"show.id\" *ngFor=\"let show of shows\"></app-show-card>\n\n</div>"
+
+/***/ }),
+
+/***/ "./src/app/components/show/show-search/show-search.component.ts":
+/*!**********************************************************************!*\
+  !*** ./src/app/components/show/show-search/show-search.component.ts ***!
+  \**********************************************************************/
+/*! exports provided: ShowSearchComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ShowSearchComponent", function() { return ShowSearchComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _services_user_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../services/user.service */ "./src/app/services/user.service.ts");
+/* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/data.service */ "./src/app/services/data.service.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _services_show_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../services/show.service */ "./src/app/services/show.service.ts");
+
+
+
+
+
+
+var ShowSearchComponent = /** @class */ (function () {
+    function ShowSearchComponent(userService, data, activatedRoute, showService) {
+        this.userService = userService;
+        this.data = data;
+        this.activatedRoute = activatedRoute;
+        this.showService = showService;
+    }
+    ShowSearchComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.activatedRoute.params.subscribe(function (params) {
+            _this.showService.searchShow(params['text'])
+                .then(function (shows) {
+                _this.shows = shows;
+                _this.text = params['text'];
+            });
+        });
+        this.user = this.data.user;
+    };
+    ShowSearchComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-show-search.component',
+            template: __webpack_require__(/*! ./show-search.component.html */ "./src/app/components/show/show-search/show-search.component.html")
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_services_user_service__WEBPACK_IMPORTED_MODULE_2__["UserService"],
+            _services_data_service__WEBPACK_IMPORTED_MODULE_3__["Data"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"],
+            _services_show_service__WEBPACK_IMPORTED_MODULE_5__["ShowService"]])
+    ], ShowSearchComponent);
+    return ShowSearchComponent;
 }());
 
 
@@ -787,7 +872,7 @@ var ShowCardComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h1 *ngIf=\"show\">{{ show.name | uppercase }} <small>({{ show.first_air_date | date: 'y'}})</small></h1>\n<hr>\n\n<div *ngIf=\"show\" class=\"row\">\n    <div class=\"col-md-4 animated fadeIn fast\">\n        <img [src]=\"imgPath.concat(show.poster_path)\" class=\"img-fluid\" [alt]=\"show.name\">\n        <br><br>\n        <a [routerLink]=\"['/home']\" class=\"btn btn-outline-danger btn-block\">Volver</a>\n        <a [routerLink]=\"['/episodes', show.id]\" class=\"btn btn-outline-danger btn-block\">Capítulos</a>\n\n    </div>\n\n    <div class=\"col-md-8 animated fadeIn\">\n        <h3>{{ show.name }}</h3>\n        <hr>\n        <p>\n            {{ show.overview }}\n        </p>\n        <!-- <div>\n        <img *ngIf=\"heroe.casa == 'Marvel'\" src=\"assets/img/marvel.png\" class=\"img-logo\" alt=\"Marvel\">\n        <img *ngIf=\"heroe.casa == 'DC'\" src=\"assets/img/dc.png\" class=\"img-logo\" alt=\"DC\">\n    </div> -->\n\n    </div>\n</div>"
+module.exports = "<h1 *ngIf=\"show\">{{ show.name | uppercase }} <small>({{ show.first_air_date | date: 'y'}})</small></h1>\n<hr>\n\n<div *ngIf=\"show\" class=\"row\">\n    <div class=\"col-md-4 animated fadeIn fast\">\n        <img [src]=\"imgPath.concat(show.poster_path)\" class=\"img-fluid\" [alt]=\"show.name\">\n        <br><br>\n        <a [routerLink]=\"['/home']\" class=\"btn btn-outline-primary btn-block\">Volver</a>\n        <a *ngIf=\"!unfollowed\" [routerLink]=\"['/episodes', show.id]\" class=\"btn btn-outline-primary btn-block\">Capítulos</a>\n        <button *ngIf=\"!unfollowed\" (click)=\"unfollowShow()\" type=\"button\" class=\"btn btn-danger btn-block\">\n            Dejar de seguir\n        </button>\n        <button *ngIf=\"unfollowed\" type=\"button\" class=\"btn btn-danger btn-block disabled\">\n            Se ha dejado de seguir\n        </button>\n    </div>\n\n    <div class=\"col-md-8 animated fadeIn\">\n        <h3>{{ show.name }}</h3>\n        <hr>\n        <p>\n            {{ show.overview }}\n        </p>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -807,6 +892,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_show_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../services/show.service */ "./src/app/services/show.service.ts");
 /* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../globals */ "./src/app/globals.ts");
 /* harmony import */ var _services_data_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/data.service */ "./src/app/services/data.service.ts");
+/* harmony import */ var src_app_services_user_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! src/app/services/user.service */ "./src/app/services/user.service.ts");
+
 
 
 
@@ -814,19 +901,36 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var ShowComponent = /** @class */ (function () {
-    function ShowComponent(activatedRoute, _showService, data) {
+    function ShowComponent(activatedRoute, showService, userService, data) {
         this.activatedRoute = activatedRoute;
-        this._showService = _showService;
+        this.showService = showService;
+        this.userService = userService;
         this.data = data;
         this.imgPath = _globals__WEBPACK_IMPORTED_MODULE_4__["imgPath"];
+        this.unfollowed = false;
     }
     ShowComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.activatedRoute.params.subscribe(function (params) {
-            _this._showService.getShow(params['id'])
+            _this.showService.getShow(params['id'])
                 .then(function (show) { return _this.show = show; });
         });
         this.user = this.data.user;
+    };
+    ShowComponent.prototype.unfollowShow = function () {
+        var followedShows = this.user.followedShows;
+        for (var i = 0; i < followedShows.length; i++) {
+            var followedShow = followedShows[i];
+            console.log('followedShow.showId: ' + followedShow.showId);
+            console.log('this.showId: ' + this.show.id);
+            if (followedShow.showId === this.show.id) {
+                followedShows.splice(i, 1);
+            }
+        }
+        this.user.followedShows = followedShows;
+        this.userService.updateUser(this.user);
+        this.data.user = this.user;
+        this.unfollowed = true;
     };
     ShowComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -835,6 +939,7 @@ var ShowComponent = /** @class */ (function () {
         }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"],
             _services_show_service__WEBPACK_IMPORTED_MODULE_3__["ShowService"],
+            src_app_services_user_service__WEBPACK_IMPORTED_MODULE_6__["UserService"],
             _services_data_service__WEBPACK_IMPORTED_MODULE_5__["Data"]])
     ], ShowComponent);
     return ShowComponent;
@@ -967,15 +1072,37 @@ var UserComponent = /** @class */ (function () {
 /*!****************************!*\
   !*** ./src/app/globals.ts ***!
   \****************************/
-/*! exports provided: imgPath, baseUrl */
+/*! exports provided: imgPath, defaultImgPath, baseUrl */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "imgPath", function() { return imgPath; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultImgPath", function() { return defaultImgPath; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "baseUrl", function() { return baseUrl; });
 var imgPath = 'https://image.tmdb.org/t/p/w500/';
+var defaultImgPath = 'assets/img/img-not-found.jpg';
 var baseUrl = '';
+
+
+/***/ }),
+
+/***/ "./src/app/models/followedShow.ts":
+/*!****************************************!*\
+  !*** ./src/app/models/followedShow.ts ***!
+  \****************************************/
+/*! exports provided: FollowedShow */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FollowedShow", function() { return FollowedShow; });
+var FollowedShow = /** @class */ (function () {
+    function FollowedShow() {
+    }
+    return FollowedShow;
+}());
+
 
 
 /***/ }),
@@ -1203,17 +1330,42 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/http */ "./node_modules/@angular/http/fesm5/http.js");
 /* harmony import */ var _globals__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../globals */ "./src/app/globals.ts");
+/* harmony import */ var _models_followedShow__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../models/followedShow */ "./src/app/models/followedShow.ts");
+/* harmony import */ var _user_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./user.service */ "./src/app/services/user.service.ts");
+
+
 
 
 
 
 var ShowService = /** @class */ (function () {
-    function ShowService(http) {
+    function ShowService(http, userService) {
         this.http = http;
+        this.userService = userService;
         this.baseUrl = _globals__WEBPACK_IMPORTED_MODULE_3__["baseUrl"];
     }
     ShowService.prototype.getShow = function (id) {
         return this.http.get(this.baseUrl + '/api/show/' + id)
+            .toPromise()
+            .then(function (response) { return response.json(); })
+            .catch(this.handleError);
+    };
+    ShowService.prototype.followShow = function (show, user) {
+        var followedShows = [];
+        if (user.followedShows != null) {
+            followedShows = user.followedShows;
+        }
+        var fs = new _models_followedShow__WEBPACK_IMPORTED_MODULE_4__["FollowedShow"]();
+        fs.showId = show.id;
+        fs.showName = show.name;
+        fs.showImgUrl = show.poster_path;
+        fs.isFavorite = false;
+        followedShows.push(fs);
+        user.followedShows = followedShows;
+        this.userService.updateUser(user);
+    };
+    ShowService.prototype.searchShow = function (text) {
+        return this.http.get(this.baseUrl + '/api/show/search/' + text)
             .toPromise()
             .then(function (response) { return response.json(); })
             .catch(this.handleError);
@@ -1224,7 +1376,8 @@ var ShowService = /** @class */ (function () {
     };
     ShowService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_http__WEBPACK_IMPORTED_MODULE_2__["Http"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_http__WEBPACK_IMPORTED_MODULE_2__["Http"],
+            _user_service__WEBPACK_IMPORTED_MODULE_5__["UserService"]])
     ], ShowService);
     return ShowService;
 }());
