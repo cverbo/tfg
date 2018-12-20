@@ -30,8 +30,8 @@ export class RecommendedComponent implements OnInit {
     this.recommendedService.getShows(this.user.id)
       .then(shows => {
         this.shows = shows;
-        this.show = this.shows[1];
-        this.shows = this.shows.slice(2, this.shows.length);
+        this.show = this.shows[0];
+        this.shows = this.shows.slice(1, this.shows.length);
       }
       );
   }
