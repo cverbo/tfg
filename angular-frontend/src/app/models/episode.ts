@@ -1,5 +1,6 @@
 export class Episode {
 
+    show_id: number;
     id: number;
     episode_number: number;
     name: string;

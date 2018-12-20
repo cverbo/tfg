@@ -9,8 +9,8 @@ export class RecommendedService {
 
     private baseUrl = envvars.baseUrl;
 
-    public getShows(): Promise<Show[]> {
-        return this.http.get(this.baseUrl + '/api/recommended/')
+    public getShows(userId: string): Promise<Show[]> {
+        return this.http.get(this.baseUrl + '/api/recommended/' + userId)
             .toPromise()
             .then(response => response.json() as Show[])
               .catch(this.handleError);

@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Episode } from '../../models/episode';
 import { EpisodeService } from '../../services/episode.service';
-import { Router } from '@angular/router';
+import { User } from 'src/app/models/user';
+import { Data } from '../../services/data.service';
+import { Show } from '../../models/show';
+import { ShowService } from '../../services/show.service';
 import * as envvars from '../../globals';
 
 @Component({
@@ -11,20 +14,51 @@ import * as envvars from '../../globals';
 })
 export class EpisodesComponent implements OnInit {
 
-  showId = '44217';
-  seasonNumber = 1;
+  user: User;
   episodes: Episode[];
+  show: Show;
+  imgPath = envvars.imgPath;
 
-  constructor( private _episodesService: EpisodeService,
-               private router: Router) { }
+  constructor( private episodesService: EpisodeService,
+               private showService: ShowService,
+               private activatedRoute: ActivatedRoute,
+               private data: Data) { }
 
   ngOnInit() {
-    this.getEpisodes();
+    this.activatedRoute.params.subscribe( params => {
+      this.episodesService.getEpisodesAllSeasons( params['id'] )
+      .then(episodes => this.episodes = episodes);
+      this.showService.getShow( params['id'] )
+      .then(show => this.show = show);
+    });
+
+    this.user = this.data.user;
   }
 
-  getEpisodes() {
-    this._episodesService.getEpisodes(this.showId, this.seasonNumber)
-      .then(episodes => this.episodes = episodes );
+  viewedEpisode(showId: number, seasonNumber: number, episodeNumber: number): boolean {
+    let watched =  false;
+    if (this.user.watchedEpisodes != null) {
+      this.user.watchedEpisodes.forEach(watchedEpisode => {
+        if (watchedEpisode.showId === showId && watchedEpisode.seasonNumber === seasonNumber && watchedEpisode.episodeNumber === episodeNumber) {
+          watched = true;
+        }
+      });
+    }
+    return watched;
+  }
+
+  markEpisodeAsWatched(showId: number, seasonNumber: number, episodeNumber: number): void {
+    let watched =  false;
+    if (this.user.watchedEpisodes != null) {
+      this.user.watchedEpisodes.forEach(watchedEpisode => {
+        if (watchedEpisode.showId === showId && watchedEpisode.seasonNumber === seasonNumber && watchedEpisode.episodeNumber === episodeNumber) {
+          watched = true;
+        }
+      });
+    }
+    if (!watched) {
+      this.episodesService.markEpisodeAsWatched(showId, seasonNumber, episodeNumber, this.user);
+    }
   }
 
 }

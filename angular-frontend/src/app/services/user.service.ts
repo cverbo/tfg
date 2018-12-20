@@ -42,6 +42,14 @@ export class UserService {
       .catch(this.handleError);
   }
 
+  followedShowsIdList(user: User): number[] {
+    let ids: number[] = [];
+    user.followedShows.forEach(followedShow => {
+      ids.push(followedShow.showId);
+    });
+    return ids;
+  }
+
   private handleError(error: any): Promise<any> {
     console.error('Some error occured', error);
     return Promise.reject(error.message || error);
