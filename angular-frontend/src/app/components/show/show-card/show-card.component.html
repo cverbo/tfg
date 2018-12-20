@@ -1,5 +1,6 @@
 <div *ngIf="show" class="card animated fadeIn fast">
-    <img class="card-img-top" [src]="imgPath.concat(show.poster_path)" [alt]="show.name">
+    <img *ngIf="show.poster_path != null" class="card-img-top" [src]="imgPath.concat(show.poster_path)" [alt]="show.name">
+    <img *ngIf="show.poster_path === null" class="card-img-top" [src]="defaultImgPath" [alt]="show.name">
     <div class="card-body">
         <h5 class="card-title">{{ show.name }}</h5>
         <p class="card-text">{{ show.overview }}</p>
@@ -8,7 +9,7 @@
         <button *ngIf="origin==='home'" (click)="showShow()" type="button" class="btn btn-outline-primary btn-block">
             Ver más...
         </button>
-        <button *ngIf="origin==='recommended' && !followed" (click)="followShow()" type="button" class="btn btn-outline-primary btn-block">
+        <button *ngIf="(origin==='recommended' || origin==='search') && !followed" (click)="followShow()" type="button" class="btn btn-outline-primary btn-block">
             Seguir serie
         </button>
         <button *ngIf="origin==='recommended' && followed" type="button" class="btn btn-success btn-block disabled">

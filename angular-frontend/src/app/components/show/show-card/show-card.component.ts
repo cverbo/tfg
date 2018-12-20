@@ -16,6 +16,7 @@ export class ShowCardComponent implements OnInit {
   @Input() origin: string;
   @Output() showSelected: EventEmitter<number>;
   imgPath = envvars.imgPath;
+  defaultImgPath = envvars.defaultImgPath;
   user: User;
   show: Show;
   followed = false;

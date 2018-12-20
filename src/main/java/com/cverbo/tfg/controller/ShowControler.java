@@ -1,5 +1,7 @@
 package com.cverbo.tfg.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,16 @@ public class ShowControler {
 	@GetMapping(value="/show/{id}")
     public Show getShow(@PathVariable("id") Integer showId) {
         return showRepository.getShow(showId);
+    }
+	
+	@GetMapping(value="/show/search/{text}")
+    public List<Show> showSearch(@PathVariable("text") String text) {
+		try {
+			text = URLEncoder.encode(text, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+        return showRepository.searchShow(text);
     }
 	
 	@GetMapping(value="/show/{id}/episodes/{season_number}")

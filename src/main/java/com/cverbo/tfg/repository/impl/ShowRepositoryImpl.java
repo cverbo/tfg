@@ -159,6 +159,38 @@ public class ShowRepositoryImpl implements ShowRepository {
 	}
 	
 	@Override
+	public List<Show> searchShow(String text) {
+		
+		List<Show> showList = new ArrayList<>();
+		
+		try {
+			URL url = new URL(baseUrl + "search/tv?query=" + text + "&page=1&" + apiKey + baseLang);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json");
+			conn.connect();
+			
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+			}
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+			ShowResult showResult = objectMapper.readValue(br, ShowResult.class);
+			
+			showList.addAll(showResult.getResults());
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return showList;
+	}
+	
+	@Override
 	public List<Episode> getEpisodesAllSeasons(Integer showId) {
 		
 		Show show = this.getShow(showId);

@@ -11,6 +11,8 @@ public interface ShowService {
 	
 	public Show getShow(Integer showId);
 	
+	public List<Show> searchShow(String text);
+	
 	public List<Episode> getEpisodes(Integer showId, Integer seasonNumber);
 	
 	public List<Episode> getEpisodesAllSeasons(Integer showId);

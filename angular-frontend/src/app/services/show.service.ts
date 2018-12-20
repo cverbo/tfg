@@ -36,6 +36,14 @@ export class ShowService {
         this.userService.updateUser(user);
     }
 
+    public searchShow(text: string): Promise<Show[]> {
+        return this.http.get(this.baseUrl + '/api/show/search/' + text)
+            .toPromise()
+            .then(response => response.json() as Show[])
+              .catch(this.handleError);
+
+    }
+
     private handleError(error: any): Promise<any> {
       console.error('Some error occured', error);
       return Promise.reject(error.message || error);

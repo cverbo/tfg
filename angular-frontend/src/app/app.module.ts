@@ -28,6 +28,7 @@ import { EpisodesComponent } from './components/episode/episodes.component';
 import { EpisodeCardComponent } from './components/episode/episode-card/episode-card.component';
 import { EpisodeService } from './services/episode.service';
 import { Data } from './services/data.service';
+import { ShowSearchComponent } from './components/show/show-search/show-search.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { Data } from './services/data.service';
     ShowComponent,
     ShowCardComponent,
     EpisodesComponent,
-    EpisodeCardComponent
+    EpisodeCardComponent,
+    ShowSearchComponent
   ],
   imports: [
     BrowserModule,

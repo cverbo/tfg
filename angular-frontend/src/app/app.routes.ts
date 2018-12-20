@@ -4,6 +4,7 @@ import { AboutComponent } from './components/about/about.component';
 import { RecommendedComponent } from './components/recommended/recommended.component';
 import { ShowComponent } from './components/show/show.component';
 import { EpisodesComponent } from './components/episode/episodes.component';
+import { ShowSearchComponent } from './components/show/show-search/show-search.component';
 
 
 const APP_ROUTES: Routes = [
@@ -12,6 +13,7 @@ const APP_ROUTES: Routes = [
     { path: 'recommended', component: RecommendedComponent},
     { path: 'show/:id', component: ShowComponent},
     { path: 'episodes/:id', component: EpisodesComponent},
+    { path: 'show-search/:text', component: ShowSearchComponent},
     { path: '**', pathMatch: 'full', redirectTo: 'home' }
 ];
 

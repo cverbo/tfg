@@ -27,6 +27,11 @@ public class ShowServiceImpl implements ShowService {
 	}
 
 	@Override
+	public List<Show> searchShow(String text) {
+		return showRepository.searchShow(text);
+	}
+
+	@Override
 	public List<Episode> getEpisodes(Integer showId, Integer seasonNumber) {
 		return showRepository.getEpisodes(showId, seasonNumber);
 	}

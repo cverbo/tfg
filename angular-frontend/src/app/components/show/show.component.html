@@ -6,9 +6,12 @@
         <img [src]="imgPath.concat(show.poster_path)" class="img-fluid" [alt]="show.name">
         <br><br>
         <a [routerLink]="['/home']" class="btn btn-outline-primary btn-block">Volver</a>
-        <a [routerLink]="['/episodes', show.id]" class="btn btn-outline-primary btn-block">Capítulos</a>
-        <button (click)="unfollowShow()" type="button" class="btn btn-danger btn-block">
+        <a *ngIf="!unfollowed" [routerLink]="['/episodes', show.id]" class="btn btn-outline-primary btn-block">Capítulos</a>
+        <button *ngIf="!unfollowed" (click)="unfollowShow()" type="button" class="btn btn-danger btn-block">
             Dejar de seguir
+        </button>
+        <button *ngIf="unfollowed" type="button" class="btn btn-danger btn-block disabled">
+            Se ha dejado de seguir
         </button>
     </div>
 
