@@ -1,6 +1,6 @@
 <h1>Tus series <small>seguidas</small></h1>
 <hr>
 <div *ngIf="user" class="card-columns">
-    <app-show-card [showId]="followedShow.showId" *ngFor="let followedShow of user.followedShows"></app-show-card>
+    <app-show-card [origin]="'home'" [showId]="followedShow.showId" *ngFor="let followedShow of user.followedShows"></app-show-card>
 
 </div>

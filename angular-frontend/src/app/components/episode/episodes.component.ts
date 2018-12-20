@@ -58,6 +58,7 @@ export class EpisodesComponent implements OnInit {
     }
     if (!watched) {
       this.episodesService.markEpisodeAsWatched(showId, seasonNumber, episodeNumber, this.user);
+      this.data.user = this.user;
     }
   }
 

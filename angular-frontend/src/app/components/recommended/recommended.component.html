@@ -3,6 +3,6 @@
 <div *ngIf="shows" class="card-columns">
 
     <!-- <app-recommended-card [show]="show" *ngFor="let show of shows"></app-recommended-card> -->
-    <app-show-card [showId]="show.id" *ngFor="let show of shows"></app-show-card>
+    <app-show-card [origin]="'recommended'" [showId]="show.id" *ngFor="let show of shows"></app-show-card>
 
 </div>

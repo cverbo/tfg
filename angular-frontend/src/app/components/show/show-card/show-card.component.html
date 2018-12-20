@@ -5,8 +5,14 @@
         <p class="card-text">{{ show.overview }}</p>
         <p class="card-text"><small class="text-muted">{{ show.first_air_date | date: 'shortDate' }}</small></p>
 
-        <button (click)="showShow()" type="button" class="btn btn-outline-primary btn-block">
-          Ver más...
+        <button *ngIf="origin==='home'" (click)="showShow()" type="button" class="btn btn-outline-primary btn-block">
+            Ver más...
+        </button>
+        <button *ngIf="origin==='recommended' && !followed" (click)="followShow()" type="button" class="btn btn-outline-primary btn-block">
+            Seguir serie
+        </button>
+        <button *ngIf="origin==='recommended' && followed" type="button" class="btn btn-success btn-block disabled">
+            Siguiendo
         </button>
 
     </div>

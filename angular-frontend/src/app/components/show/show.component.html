@@ -5,9 +5,11 @@
     <div class="col-md-4 animated fadeIn fast">
         <img [src]="imgPath.concat(show.poster_path)" class="img-fluid" [alt]="show.name">
         <br><br>
-        <a [routerLink]="['/home']" class="btn btn-outline-danger btn-block">Volver</a>
-        <a [routerLink]="['/episodes', show.id]" class="btn btn-outline-danger btn-block">Capítulos</a>
-
+        <a [routerLink]="['/home']" class="btn btn-outline-primary btn-block">Volver</a>
+        <a [routerLink]="['/episodes', show.id]" class="btn btn-outline-primary btn-block">Capítulos</a>
+        <button (click)="unfollowShow()" type="button" class="btn btn-danger btn-block">
+            Dejar de seguir
+        </button>
     </div>
 
     <div class="col-md-8 animated fadeIn">
@@ -16,10 +18,5 @@
         <p>
             {{ show.overview }}
         </p>
-        <!-- <div>
-        <img *ngIf="heroe.casa == 'Marvel'" src="assets/img/marvel.png" class="img-logo" alt="Marvel">
-        <img *ngIf="heroe.casa == 'DC'" src="assets/img/dc.png" class="img-logo" alt="DC">
-    </div> -->
-
     </div>
 </div>
