@@ -54,7 +54,6 @@ public class ShowRepositoryImpl implements ShowRepository {
 		
 		List<Show> showList = new LinkedList<>();
 		showList.add(this.getShow(randomFollowedShowId));
-		System.out.println(this.getShow(randomFollowedShowId).getName());
 		
 		try {
 			URL url = new URL(baseUrl + "tv/" + randomFollowedShowId + "/recommendations?page=1&" + apiKey + baseLang);

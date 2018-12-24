@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Episode } from '../../models/episode';
 import { EpisodeService } from '../../services/episode.service';
 import { User } from 'src/app/models/user';
-import { Data } from '../../services/data.service';
 import { Show } from '../../models/show';
 import { ShowService } from '../../services/show.service';
 import * as envvars from '../../globals';
@@ -21,8 +20,7 @@ export class EpisodesComponent implements OnInit {
 
   constructor( private episodesService: EpisodeService,
                private showService: ShowService,
-               private activatedRoute: ActivatedRoute,
-               private data: Data) { }
+               private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe( params => {
@@ -32,7 +30,7 @@ export class EpisodesComponent implements OnInit {
       .then(show => this.show = show);
     });
 
-    this.user = this.data.user;
+    this.user = JSON.parse(localStorage.getItem('user'));
   }
 
   viewedEpisode(showId: number, seasonNumber: number, episodeNumber: number): boolean {
@@ -58,7 +56,7 @@ export class EpisodesComponent implements OnInit {
     }
     if (!watched) {
       this.episodesService.markEpisodeAsWatched(showId, seasonNumber, episodeNumber, this.user);
-      this.data.user = this.user;
+      localStorage.setItem('user', JSON.stringify(this.user));
     }
   }
 

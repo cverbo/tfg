@@ -10,7 +10,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item" routerLinkActive="active">
-                <a class="nav-link" [routerLink]="['home']">Mis Series</a>
+                <a class="nav-link" [routerLink]="['my-shows']">Mis Series</a>
             </li>
             <li class="nav-item" routerLinkActive="active">
                 <a class="nav-link" [routerLink]="['recommended']">Recomendadas</a>
@@ -23,7 +23,12 @@
             <input class="form-control mr-sm-2" type="text" placeholder="Buscar serie" (keyup.enter)="searchShow(searchText.value)" aria-label="Buscar serie" #searchText>
             <button (click)="searchShow(searchText.value)" class="btn btn-outline-primary my-2 my-sm-0" type="button">Buscar</button>
         </div>
-
+        <span class="navbar-btn" style="padding-left: 50px">
+            <button *ngIf="!getAuth().isAuthenticated()" (click)="login()" class="btn btn-outline-success my-2 my-sm-0" type="button">Entrar</button>
+        </span>
+        <span class="navbar-btn">
+            <button *ngIf="getAuth().isAuthenticated()" (click)="logout()" class="btn btn-outline-danger my-2 my-sm-0" type="button">Salir</button>
+        </span>
 
     </div>
 </nav>

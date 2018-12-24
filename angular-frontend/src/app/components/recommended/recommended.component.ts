@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RecommendedService } from '../../services/recommended.service';
 import { Show } from '../../models/show';
-import { Router } from '@angular/router';
 import { User } from 'src/app/models/user';
-import { Data } from '../../services/data.service';
-import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-recommended',
@@ -16,13 +13,11 @@ export class RecommendedComponent implements OnInit {
   shows: Show[];
   user: User;
 
-  constructor( private recommendedService: RecommendedService,
-               private userService: UserService,
-               private data: Data,
-               private router: Router) { }
+  constructor( private recommendedService: RecommendedService) { }
 
   ngOnInit() {
-    this.user = this.data.user;
+    this.user = JSON.parse(localStorage.getItem('user'));
+    console.log(this.user.id);
     this.getShows();
   }
 

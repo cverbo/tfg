@@ -595,8 +595,8 @@ var RecommendedComponent = /** @class */ (function () {
         this.recommendedService.getShows(this.user.id)
             .then(function (shows) {
             _this.shows = shows;
-            _this.show = _this.shows[1];
-            _this.shows = _this.shows.slice(2, _this.shows.length);
+            _this.show = _this.shows[0];
+            _this.shows = _this.shows.slice(1, _this.shows.length);
         });
     };
     RecommendedComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([

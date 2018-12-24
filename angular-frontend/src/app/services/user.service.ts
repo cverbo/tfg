@@ -23,7 +23,6 @@ export class UserService {
   }
 
   createUser(userData: User): Promise<User> {
-    alert(userData.firstName);
     return this.http.post(this.baseUrl + '/api/users/', userData)
       .toPromise().then(response => response.json() as User)
       .catch(this.handleError);
@@ -48,6 +47,23 @@ export class UserService {
       ids.push(followedShow.showId);
     });
     return ids;
+  }
+
+  newUser(profile: any): User {
+    let newUser = new User();
+
+    if (profile.sub.split('|')[0] === 'google-oauth2') {
+      newUser.email = profile.nickname + '@gmail.com';
+    } else {
+      newUser.email = profile.name;
+    }
+
+    newUser.id = profile.sub;
+    newUser.userName = profile.nickname;
+
+    this.createUser(newUser);
+
+    return newUser;
   }
 
   private handleError(error: any): Promise<any> {

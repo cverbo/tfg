@@ -29,7 +29,7 @@ export class ShowComponent  implements OnInit {
       .then(show => this.show = show);
     });
 
-    this.user = this.data.user;
+    this.user = JSON.parse(localStorage.getItem('user'));
   }
 
   unfollowShow() {
@@ -44,7 +44,7 @@ export class ShowComponent  implements OnInit {
     }
     this.user.followedShows = followedShows;
     this.userService.updateUser(this.user);
-    this.data.user = this.user;
+    localStorage.setItem('user', JSON.stringify(this.user));
     this.unfollowed = true;
   }
 

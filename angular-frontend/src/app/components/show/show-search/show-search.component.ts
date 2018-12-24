@@ -30,7 +30,7 @@ export class ShowSearchComponent implements OnInit {
       });
     });
 
-    this.user = this.data.user;
+    this.user = JSON.parse(localStorage.getItem('user'));
   }
 
 }
