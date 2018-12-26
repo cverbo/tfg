@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
 import * as auth0 from 'auth0-js';
 import { Http } from '@angular/http';
+import * as envvars from '../globals';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +17,7 @@ export class AuthService {
     clientID: 'bJpmSt9Z8Sq1Ykav2JbLQwUPQ4uY93Pn',
     domain: 'verbo-carlos.eu.auth0.com',
     responseType: 'token id_token',
-    redirectUri : 'http://localhost:4200/#/home',
+    redirectUri : envvars.baseUri + '#/home',
     scope: 'openid profile'
   });
 
@@ -82,7 +82,7 @@ export class AuthService {
     // Remove isLoggedIn flag from localStorage
     localStorage.removeItem('isLoggedIn');
     // Go back to the home route
-    window.location.href = 'https://verbo-carlos.eu.auth0.com/v2/logout?returnTo=http://localhost:4200/';
+    window.location.href = 'https://verbo-carlos.eu.auth0.com/v2/logout?returnTo=' + envvars.baseUri;
     this.router.navigate(['/']);
   }
 

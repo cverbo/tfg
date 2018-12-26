@@ -1,7 +1,5 @@
 package com.cverbo.tfg;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
@@ -12,10 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.cverbo.tfg.model.Episode;
 import com.cverbo.tfg.model.Show;
-import com.cverbo.tfg.model.mongo.MongoFollowedShow;
-import com.cverbo.tfg.model.mongo.MongoUser;
-import com.cverbo.tfg.model.mongo.MongoWatchedEpisode;
+import com.cverbo.tfg.model.User;
 import com.cverbo.tfg.service.impl.ShowServiceImpl;
 import com.cverbo.tfg.service.impl.UserServiceImpl;
 
@@ -35,20 +32,20 @@ public class UserTest {
 		
 		String newFirstName = "Modified";
 		
-		MongoUser user = userServiceImpl.getUser("5c11635a608b891084b7a23a");
-		String currentFirstName = user.getFirstName();
+		User user = userServiceImpl.getUser("5c11635a608b891084b7a23a");
+		String currentFirstName = user.getFullName();
 		System.out.println("Nombre orignal es: " + currentFirstName);
-		user.setFirstName(newFirstName);
+		user.setFullName(newFirstName);
 		userServiceImpl.updateUser(user.getId(), user);
-		MongoUser modifiedUser = userServiceImpl.getUser(user.getId());
-		Assert.assertTrue(modifiedUser.getFirstName().equals(newFirstName));
-		System.out.println("Nombre orignal modificado:"  + modifiedUser.getFirstName());
+		User modifiedUser = userServiceImpl.getUser(user.getId());
+		Assert.assertTrue(modifiedUser.getFullName().equals(newFirstName));
+		System.out.println("Nombre orignal modificado:"  + modifiedUser.getFullName());
 		
-		user.setFirstName(currentFirstName);
+		user.setFullName(currentFirstName);
 		userServiceImpl.updateUser(user.getId(), user);
-		MongoUser currentUser = userServiceImpl.getUser(user.getId());
-		Assert.assertTrue(currentUser.getFirstName().equals(currentFirstName));
-		System.out.println("Nombre orignal restaurado: " + currentUser.getFirstName());
+		User currentUser = userServiceImpl.getUser(user.getId());
+		Assert.assertTrue(currentUser.getFullName().equals(currentFirstName));
+		System.out.println("Nombre orignal restaurado: " + currentUser.getFullName());
 		
 	}
 	
@@ -56,42 +53,28 @@ public class UserTest {
 	@Ignore
 	public void getUser_test() {
 		
-		MongoUser user = userServiceImpl.getUser("5c11635a608b891084b7a23a");
+		User user = userServiceImpl.getUser("5c11635a608b891084b7a23a");
 		Assert.assertFalse(user.getId() == null);
 		
-		System.out.println(user.getFirstName());
+		System.out.println(user.getFullName());
 		
 	}
 	
 	@Test
 	public void insertUser_test() {
 		
-		MongoUser user = new MongoUser();
+		User user = new User();
 		
 		user.setActive(true);
-		user.setBirthDate(new Date());
 		user.setEmail("carlos.verbo@gmail.com");
-		user.setFirstName("Carlos");
-		user.setLastName("Verbo");
+		user.setFullName("Carlos Verbo");
 		user.setPassword("1111");
 		user.setUserName("carlos.verbo");
 		
 		List<Show> showList = showService.getRecommended("5c14f902608b892548c1bfa0");
-		List<MongoFollowedShow> followedShows = new ArrayList<>();
+		user.setFollowedShows(showList);
 		
-		MongoFollowedShow followedShow;
-		for (Show show : showList) {
-			followedShow = new MongoFollowedShow();
-			followedShow.setFavorite(false);
-			followedShow.setShowId(show.getId());
-			followedShow.setShowImgUrl(show.getPoster_path());
-			followedShow.setShowName(show.getName());
-			followedShows.add(followedShow);
-		}
-		
-		user.setFollowedShows(followedShows);
-		
-		MongoWatchedEpisode watchedEpisode = new MongoWatchedEpisode();
+		Episode watchedEpisode = new Episode();
 		
 		watchedEpisode.setShowId(44217);
 		watchedEpisode.setSeasonNumber(1);

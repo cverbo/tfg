@@ -4,19 +4,22 @@ import java.util.List;
 
 import com.cverbo.tfg.model.Episode;
 import com.cverbo.tfg.model.Show;
+import com.cverbo.tfg.model.ShowCalendar;
 
 public interface ShowService {
 
 	public List<Show> getRecommended(String userId);
 	
-	public Show getShow(Integer showId);
+	public Show getShow(String userId, Integer showId);
 	
-	public List<Show> searchShow(String text);
+	public List<Show> searchShow(String userId, String text);
 	
-	public List<Episode> getEpisodes(Integer showId, Integer seasonNumber);
+	public List<Episode> getEpisodes(String userId, Integer showId, Integer seasonNumber);
 	
-	public List<Episode> getEpisodesAllSeasons(Integer showId);
+	public List<Episode> getEpisodesAllSeasons(String userId, Integer showId);
 
-	public Episode getEpisode(Integer showId, Integer seasonNumber, Integer episodeNumber);
+	public Episode getEpisode(String userId, Integer showId, Integer seasonNumber, Integer episodeNumber);
+	
+	public List<ShowCalendar> getPersonalCalendar(String userId);
 	
 }

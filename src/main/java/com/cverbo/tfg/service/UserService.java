@@ -1,26 +1,25 @@
 package com.cverbo.tfg.service;
 
-import com.cverbo.tfg.model.mongo.MongoFollowedShow;
-import com.cverbo.tfg.model.mongo.MongoFollowedUser;
-import com.cverbo.tfg.model.mongo.MongoUser;
-import com.cverbo.tfg.model.mongo.MongoWatchedEpisode;
+import com.cverbo.tfg.model.Episode;
+import com.cverbo.tfg.model.Show;
+import com.cverbo.tfg.model.User;
 
 public interface UserService {
 
-	MongoUser insertUser(MongoUser user);
+	User insertUser(User user);
 	
-	MongoUser getUser(String userId);
+	User getUser(String userId);
 	
-	MongoUser updateUser(String userId, MongoUser user);
+	User updateUser(String userId, User user);
 	
-	MongoUser inactiveUser(String userId);
+	User inactiveUser(String userId);
 	
-	MongoUser addFollowedShow(String userId, MongoFollowedShow show);
+	User addFollowedShow(String userId, Show show);
 	
-	MongoUser markShowAsFavorite(String userId, int showId);
+	User markShowAsFavorite(String userId, int showId);
 	
-	MongoUser addWatchedEpisode(String userId, int showId, MongoWatchedEpisode episode);
+	User addWatchedEpisode(String userId, int showId, Episode episode);
 	
-	MongoUser addFollowedUser(String userId, MongoFollowedUser followedUser);
+	User addFollowedUser(String userId, User followedUser);
 	
 }

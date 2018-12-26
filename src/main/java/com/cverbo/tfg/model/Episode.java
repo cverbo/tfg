@@ -8,20 +8,22 @@ import lombok.Setter;
 @Getter @Setter
 public class Episode {
 	
-	private int show_id;
+	private int episodeId;
 	
-	private int id;
+	private int showId;
 	
-	private int episode_number;
+	private int episodeNumber;
 	
 	private String name;
 	
-	private int season_number;
+	private int seasonNumber;
 	
 	private String overview;
 	
-	private String still_path;
+	private String stillPath;
 	
-	private Date air_date;
+	private Date airDate;
+	
+	private boolean watched;
 	
 }

@@ -17,13 +17,19 @@ import com.cverbo.tfg.repository.impl.ShowRepositoryImpl;
 @SpringBootTest
 public class ShowRepositoryTest {
 	
+	private static final String USERID = "google-oauth2|105912882452691646006";
+	private static final int SHOWID = 60735;
+	private static final int SEASONID = 1;
+	private static final int EPISODEID = 1;
+	
 	@Autowired
 	ShowRepositoryImpl showRepository;
 
 	@Test
+	@Ignore
 	public void getRecommendedTest() {
 		
-		List<Show> showList = showRepository.getRecommended("5c14f902608b892548c1bfa0");
+		List<Show> showList = showRepository.getRecommended(USERID);
 		for (Show show : showList) {
 			System.out.println(show.getName());
 		}
@@ -45,7 +51,8 @@ public class ShowRepositoryTest {
 	@Ignore
 	public void getShowTest() {
 		
-		showRepository.getShow(60735);
+		Show show = showRepository.getShow(USERID, SHOWID);
+		System.out.println(show.getName());		
 		
 	}
 
@@ -53,9 +60,9 @@ public class ShowRepositoryTest {
 	@Ignore
 	public void getEpisodesAllSeasonsTest() {
 		
-		List<Episode> episodesList = showRepository.getEpisodesAllSeasons(60735);
+		List<Episode> episodesList = showRepository.getEpisodesAllSeasons(USERID, SHOWID);
 		for (Episode episode : episodesList) {
-			System.out.println(episode.getSeason_number() + "x" + episode.getEpisode_number() + " - " + episode.getName());
+			System.out.println(episode.getSeasonNumber() + "x" + episode.getEpisodeNumber() + " - " + episode.getName());
 		}		
 		
 	}
@@ -64,9 +71,9 @@ public class ShowRepositoryTest {
 	@Ignore
 	public void getEpisodesTest() {
 		
-		List<Episode> episodesList = showRepository.getEpisodes(60735, 1);
+		List<Episode> episodesList = showRepository.getEpisodes(USERID, SHOWID, SEASONID);
 		for (Episode episode : episodesList) {
-			System.out.println(episode.getId() + " - " + episode.getName() + " - " + episode.getEpisode_number());
+			System.out.println(episode.getEpisodeId() + " - " + episode.getName() + " - " + episode.getEpisodeNumber());
 		}		
 		
 	}
@@ -75,8 +82,8 @@ public class ShowRepositoryTest {
 	@Ignore
 	public void getEpisodeTest() {
 		
-		Episode episode = showRepository.getEpisode(60735, 1, 1);
-		System.out.println(episode.getId() + " - " + episode.getName() + " - " + episode.getEpisode_number());
+		Episode episode = showRepository.getEpisode(USERID, SHOWID, SEASONID, EPISODEID);
+		System.out.println(episode.getEpisodeId() + " - " + episode.getName() + " - " + episode.getEpisodeNumber());
 		
 	}
 	

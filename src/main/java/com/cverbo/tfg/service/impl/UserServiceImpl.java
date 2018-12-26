@@ -7,10 +7,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cverbo.tfg.model.mongo.MongoFollowedShow;
-import com.cverbo.tfg.model.mongo.MongoFollowedUser;
-import com.cverbo.tfg.model.mongo.MongoUser;
-import com.cverbo.tfg.model.mongo.MongoWatchedEpisode;
+import com.cverbo.tfg.model.Episode;
+import com.cverbo.tfg.model.Show;
+import com.cverbo.tfg.model.User;
 import com.cverbo.tfg.repository.UserRepository;
 import com.cverbo.tfg.service.UserService;
 
@@ -21,7 +20,7 @@ public class UserServiceImpl implements UserService {
 	UserRepository userRepository;
 
 	@Override
-	public MongoUser insertUser(MongoUser user) {
+	public User insertUser(User user) {
 		
 		userRepository.insert(user);
 		return user;
@@ -29,9 +28,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public MongoUser getUser(String userId) {
+	public User getUser(String userId) {
 
-		Optional<MongoUser> userOptional = userRepository.findById(userId);
+		Optional<User> userOptional = userRepository.findById(userId);
 		if (userOptional.isPresent()) {
 			return userOptional.get();
 		} else {
@@ -40,7 +39,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public MongoUser updateUser(String userId, MongoUser user) {
+	public User updateUser(String userId, User user) {
 		
 		if (this.getUser(user.getId()) == null) {
 			return null;
@@ -51,9 +50,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public MongoUser inactiveUser(String userId) {
+	public User inactiveUser(String userId) {
 		
-		MongoUser user = this.getUser(userId);
+		User user = this.getUser(userId);
 		if (user == null) {
 			return null;
 		} else {
@@ -64,13 +63,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public MongoUser addFollowedShow(String userId, MongoFollowedShow show) {
+	public User addFollowedShow(String userId, Show show) {
 		
-		MongoUser user = this.getUser(userId);
+		User user = this.getUser(userId);
 		if (user == null) {
 			return null;
 		} else {
-			List<MongoFollowedShow> followedShows = user.getFollowedShows();
+			List<Show> followedShows = user.getFollowedShows();
 			followedShows.add(show);
 			user.setFollowedShows(followedShows);
 			return this.updateUser(userId, user);
@@ -79,16 +78,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public MongoUser markShowAsFavorite(String userId, int showId) {
+	public User markShowAsFavorite(String userId, int showId) {
 
-		MongoUser user = this.getUser(userId);
+		User user = this.getUser(userId);
 		if (user == null) {
 			return null;
 		} else {
-			List<MongoFollowedShow> followedShows = user.getFollowedShows();
-			List<MongoFollowedShow> followedShowsUpdated = new ArrayList<>();
-			for (MongoFollowedShow followedShow : followedShows) {
-				if (followedShow.getShowId() == showId) {
+			List<Show> followedShows = user.getFollowedShows();
+			List<Show> followedShowsUpdated = new ArrayList<>();
+			for (Show followedShow : followedShows) {
+				if (followedShow.getId() == showId) {
 					followedShow.setFavorite(true);
 				}
 				followedShowsUpdated.add(followedShow);
@@ -100,13 +99,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public MongoUser addWatchedEpisode(String userId, int showId, MongoWatchedEpisode episode) {
+	public User addWatchedEpisode(String userId, int showId, Episode episode) {
 		
-		MongoUser user = this.getUser(userId);
+		User user = this.getUser(userId);
 		if (user == null) {
 			return null;
 		} else {
-			List<MongoWatchedEpisode> watchedEpisodes = user.getWatchedEpisodes();
+			List<Episode> watchedEpisodes = user.getWatchedEpisodes();
 			watchedEpisodes.add(episode);
 			user.setWatchedEpisodes(watchedEpisodes);
 			return this.updateUser(userId, user);
@@ -115,13 +114,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public MongoUser addFollowedUser(String userId, MongoFollowedUser followedUser) {
+	public User addFollowedUser(String userId, User followedUser) {
 
-		MongoUser user = this.getUser(userId);
+		User user = this.getUser(userId);
 		if (user == null) {
 			return null;
 		} else {
-			List<MongoFollowedUser> followedUsers = user.getFollowedUsers();
+			List<User> followedUsers = user.getFollowedUsers();
 			followedUsers.add(followedUser);
 			user.setFollowedUsers(followedUsers);
 			return this.updateUser(userId, user);

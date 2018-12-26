@@ -6,8 +6,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +18,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.cverbo.tfg.model.Episode;
-import com.cverbo.tfg.model.EpisodeResult;
 import com.cverbo.tfg.model.Show;
-import com.cverbo.tfg.model.ShowResult;
-import com.cverbo.tfg.model.mongo.MongoFollowedShow;
-import com.cverbo.tfg.model.mongo.MongoUser;
+import com.cverbo.tfg.model.ShowCalendar;
+import com.cverbo.tfg.model.ShowDetailed;
+import com.cverbo.tfg.model.User;
+import com.cverbo.tfg.model.fetch.EpisodeFetch;
+import com.cverbo.tfg.model.fetch.EpisodeResultFetch;
+import com.cverbo.tfg.model.fetch.ShowFetch;
+import com.cverbo.tfg.model.fetch.ShowResultFetch;
 import com.cverbo.tfg.repository.ShowRepository;
 import com.cverbo.tfg.service.UserService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -45,55 +51,64 @@ public class ShowRepositoryImpl implements ShowRepository {
 		
 		//Recoger un id de serie al azar para devolver las recomendanciones 
 		Random random = new Random();
-		MongoUser user = userService.getUser(userId);
+		User user = userService.getUser(userId);
 		List<Integer> followedShowsIdList = new ArrayList<>();
-		for (MongoFollowedShow followedShow : user.getFollowedShows()) {
-			followedShowsIdList.add(followedShow.getShowId());
-		}
-		int randomFollowedShowId = followedShowsIdList.get(random.nextInt(followedShowsIdList.size()));
-		
 		List<Show> showList = new LinkedList<>();
-		showList.add(this.getShow(randomFollowedShowId));
-		
-		try {
-			URL url = new URL(baseUrl + "tv/" + randomFollowedShowId + "/recommendations?page=1&" + apiKey + baseLang);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", "application/json");
-			conn.connect();
-			
-			if (conn.getResponseCode() != 200) {
-				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+
+		if (user.getFollowedShows() != null && !user.getFollowedShows().isEmpty()) {
+			for (Show followedShow : user.getFollowedShows()) {
+				followedShowsIdList.add(followedShow.getId());
 			}
-			
-			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			
-			ObjectMapper objectMapper = new ObjectMapper();
-			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-			ShowResult showResult = objectMapper.readValue(br, ShowResult.class);
-			
-			for (Show show : showResult.getResults()) {
-				if (!followedShowsIdList.contains(show.getId())) {
-					showList.add(show);
+			int randomFollowedShowId = followedShowsIdList.get(random.nextInt(followedShowsIdList.size()));
+			showList.add(this.getShow(userId, randomFollowedShowId));
+		
+			try {
+				URL url = new URL(baseUrl + "tv/" + randomFollowedShowId + "/recommendations?page=1&" + apiKey + baseLang);
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("GET");
+				conn.setRequestProperty("Accept", "application/json");
+				conn.connect();
+				
+				if (conn.getResponseCode() != 200) {
+					throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
 				}
+				
+				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				
+				ObjectMapper objectMapper = new ObjectMapper();
+				objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+				objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+				ShowResultFetch showResultFetch = objectMapper.readValue(br, ShowResultFetch.class);
+				
+				for (ShowFetch showFetch : showResultFetch.getResults()) {
+					if (!followedShowsIdList.contains(showFetch.getId())) {
+						Show show = fromShowFetchToShow(showFetch, false, false);
+						showList.add(show);
+					}
+				}
+				
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			return showList;
 		
-		return showList;
+		} else {
+			return getPopular(userId);
+		}
 				
 	}
 	
 	@Override
 	public List<Show> getPopular(String userId) {
 		
-		MongoUser user = userService.getUser(userId);
+		User user = userService.getUser(userId);
 		List<Integer> followedShowsIdList = new ArrayList<>();
-		for (MongoFollowedShow followedShow : user.getFollowedShows()) {
-			followedShowsIdList.add(followedShow.getShowId());
+		
+		if (user.getFollowedShows() != null && !user.getFollowedShows().isEmpty()) {
+			for (Show followedShow : user.getFollowedShows()) {
+				followedShowsIdList.add(followedShow.getId());
+			}
 		}
 		
 		List<Show> showList = new ArrayList<>();
@@ -114,10 +129,11 @@ public class ShowRepositoryImpl implements ShowRepository {
 			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-			ShowResult showResult = objectMapper.readValue(br, ShowResult.class);
+			ShowResultFetch showResultFetch = objectMapper.readValue(br, ShowResultFetch.class);
 			
-			for (Show show : showResult.getResults()) {
-				if (!followedShowsIdList.contains(show.getId())) {
+			for (ShowFetch showFetch : showResultFetch.getResults()) {
+				if (!followedShowsIdList.contains(showFetch.getId())) {
+					Show show = fromShowFetchToShow(showFetch, false, false);
 					showList.add(show);
 				}
 			}
@@ -130,9 +146,26 @@ public class ShowRepositoryImpl implements ShowRepository {
 				
 	}
 
-	public Show getShow(Integer showId) {
-		
+	@Override
+	public Show getShow(String userId, Integer showId) {
+
 		Show show = new Show();
+		ShowFetch showFetch = new ShowFetch();
+		boolean isFollowed = false;
+		boolean isFavorite = false;
+		
+		User user = userService.getUser(userId);
+		List<Integer> followedShowsIdList = new ArrayList<>();
+		List<Integer> favoriteShowsIdList = new ArrayList<>();
+
+		if (user.getFollowedShows() != null && !user.getFollowedShows().isEmpty()) {
+			for (Show followedShow : user.getFollowedShows()) {
+				followedShowsIdList.add(followedShow.getId());
+				if (followedShow.isFavorite()) {
+					favoriteShowsIdList.add(followedShow.getId());
+				}
+			}
+		}
 		
 		try {
 			URL url = new URL(baseUrl + "tv/" + showId + "?" + apiKey + baseLang);
@@ -150,7 +183,69 @@ public class ShowRepositoryImpl implements ShowRepository {
 			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-			show = objectMapper.readValue(br, Show.class);
+			showFetch = objectMapper.readValue(br, ShowFetch.class);
+			if (followedShowsIdList.contains(showFetch.getId())) {
+				isFollowed = true;
+			}
+			if (favoriteShowsIdList.contains(showFetch.getId())) {
+				isFavorite = true;
+			}
+			show = fromShowFetchToShow(showFetch, isFollowed, isFavorite);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return show;
+	}
+	
+
+
+	@Override
+	public ShowDetailed getShowDetailed(String userId, Integer showId) {
+
+		ShowDetailed show = new ShowDetailed();
+		ShowFetch showFetch = new ShowFetch();
+		boolean isFollowed = false;
+		boolean isFavorite = false;
+		
+		User user = userService.getUser(userId);
+		List<Integer> followedShowsIdList = new ArrayList<>();
+		List<Integer> favoriteShowsIdList = new ArrayList<>();
+
+		if (user.getFollowedShows() != null && !user.getFollowedShows().isEmpty()) {
+			for (Show followedShow : user.getFollowedShows()) {
+				followedShowsIdList.add(followedShow.getId());
+				if (followedShow.isFavorite()) {
+					favoriteShowsIdList.add(followedShow.getId());
+				}
+			}
+		}
+		
+		try {
+			URL url = new URL(baseUrl + "tv/" + showId + "?" + apiKey + baseLang);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json");
+			conn.connect();
+			
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+			}
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+			showFetch = objectMapper.readValue(br, ShowFetch.class);
+			if (followedShowsIdList.contains(showFetch.getId())) {
+				isFollowed = true;
+			}
+			if (favoriteShowsIdList.contains(showFetch.getId())) {
+				isFavorite = true;
+			}
+			show = fromShowFetchToShowDetailed(showFetch, isFollowed, isFavorite);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -160,9 +255,22 @@ public class ShowRepositoryImpl implements ShowRepository {
 	}
 	
 	@Override
-	public List<Show> searchShow(String text) {
+	public List<Show> searchShow(String userId, String text) {
 		
 		List<Show> showList = new ArrayList<>();
+		
+		User user = userService.getUser(userId);
+		List<Integer> followedShowsIdList = new ArrayList<>();
+		List<Integer> favoriteShowsIdList = new ArrayList<>();
+		
+		if (user.getFollowedShows() != null && !user.getFollowedShows().isEmpty()) {
+			for (Show followedShow : user.getFollowedShows()) {
+				followedShowsIdList.add(followedShow.getId());
+				if (followedShow.isFavorite()) {
+					favoriteShowsIdList.add(followedShow.getId());
+				}
+			}
+		}
 		
 		try {
 			URL url = new URL(baseUrl + "search/tv?query=" + text + "&page=1&" + apiKey + baseLang);
@@ -180,9 +288,20 @@ public class ShowRepositoryImpl implements ShowRepository {
 			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-			ShowResult showResult = objectMapper.readValue(br, ShowResult.class);
+			ShowResultFetch showResultFetch = objectMapper.readValue(br, ShowResultFetch.class);
 			
-			showList.addAll(showResult.getResults());
+			for (ShowFetch showFetch : showResultFetch.getResults()) {
+				boolean isFollowed = false;
+				boolean isFavorite = false;
+				if (followedShowsIdList.contains(showFetch.getId())) {
+					isFollowed = true;
+				}
+				if (favoriteShowsIdList.contains(showFetch.getId())) {
+					isFavorite = true;
+				}
+				Show show = fromShowFetchToShow(showFetch, isFollowed, isFavorite);
+				showList.add(show);
+			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -192,12 +311,21 @@ public class ShowRepositoryImpl implements ShowRepository {
 	}
 	
 	@Override
-	public List<Episode> getEpisodesAllSeasons(Integer showId) {
+	public List<Episode> getEpisodesAllSeasons(String userId, Integer showId) {
 		
-		Show show = this.getShow(showId);
-		int numberOfSeasons = show.getNumber_of_seasons();
+		ShowDetailed showDetailed = this.getShowDetailed(userId, showId);
+		int numberOfSeasons = showDetailed.getNumberOfSeasons();
 
-		List<Episode> episodeList = new ArrayList<>();
+		User user = userService.getUser(userId);
+		List<Integer> watchedEpisodesIdList = new ArrayList<>();
+
+		if (user.getWatchedEpisodes() != null && !user.getWatchedEpisodes().isEmpty()) {
+			for (Episode watchedEpisode : user.getWatchedEpisodes()) {
+				watchedEpisodesIdList.add(watchedEpisode.getEpisodeId());
+			}
+		}
+		
+		List<Episode> episodeList = new LinkedList<>();
 		
 		try {
 			for (int i = 1; i <= numberOfSeasons; i++) {
@@ -216,9 +344,16 @@ public class ShowRepositoryImpl implements ShowRepository {
 				ObjectMapper objectMapper = new ObjectMapper();
 				objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 				objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-				EpisodeResult episodeResult = objectMapper.readValue(br, EpisodeResult.class);
+				EpisodeResultFetch episodeResult = objectMapper.readValue(br, EpisodeResultFetch.class);
 				
-				episodeList.addAll(episodeResult.getEpisodes());
+				for (EpisodeFetch episodeFetch : episodeResult.getEpisodes()) {
+					boolean isWatched = false;
+					if (watchedEpisodesIdList.contains(episodeFetch.getId())) {
+						isWatched = true;
+					}
+					Episode episode = fromEpisodeFetchToEpisode(episodeFetch, isWatched);
+					episodeList.add(episode);
+				}
 			}
 			
 		} catch (IOException e) {
@@ -229,9 +364,18 @@ public class ShowRepositoryImpl implements ShowRepository {
 	}
 
 	@Override
-	public List<Episode> getEpisodes(Integer showId, Integer seasonNumber) {
+	public List<Episode> getEpisodes(String userId, Integer showId, Integer seasonNumber) {
 		
-		List<Episode> episodeList = new ArrayList<>();
+		List<Episode> episodeList = new LinkedList<>();
+
+		User user = userService.getUser(userId);
+		List<Integer> watchedEpisodesIdList = new ArrayList<>();
+		
+		if (user.getWatchedEpisodes() != null && !user.getWatchedEpisodes().isEmpty()) {
+			for (Episode watchedEpisode : user.getWatchedEpisodes()) {
+				watchedEpisodesIdList.add(watchedEpisode.getEpisodeId());
+			}
+		}
 		
 		try {
 			URL url = new URL(baseUrl + "tv/" + showId + "/season/" + seasonNumber + "?" + apiKey + baseLang);
@@ -249,9 +393,16 @@ public class ShowRepositoryImpl implements ShowRepository {
 			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-			EpisodeResult episodeResult = objectMapper.readValue(br, EpisodeResult.class);
-			
-			episodeList.addAll(episodeResult.getEpisodes());
+			EpisodeResultFetch episodeResult = objectMapper.readValue(br, EpisodeResultFetch.class);
+		
+			for (EpisodeFetch episodeFetch : episodeResult.getEpisodes()) {
+				boolean isWatched = false;
+				if (watchedEpisodesIdList.contains(episodeFetch.getId())) {
+					isWatched = true;
+				}
+				Episode episode = fromEpisodeFetchToEpisode(episodeFetch, isWatched);
+				episodeList.add(episode);
+			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -261,9 +412,20 @@ public class ShowRepositoryImpl implements ShowRepository {
 	}
 
 	@Override
-	public Episode getEpisode(Integer showId, Integer seasonNumber, Integer episodeNumber) {
+	public Episode getEpisode(String userId, Integer showId, Integer seasonNumber, Integer episodeNumber) {
 
 		Episode episode = new Episode();
+		EpisodeFetch episodeFetch = new EpisodeFetch();
+		boolean isWatched = false;
+		
+		User user = userService.getUser(userId);
+		List<Integer> watchedEpisodesIdList = new ArrayList<>();
+
+		if (user.getWatchedEpisodes() != null && !user.getWatchedEpisodes().isEmpty()) {
+			for (Episode watchedEpisode : user.getWatchedEpisodes()) {
+				watchedEpisodesIdList.add(watchedEpisode.getEpisodeId());
+			}
+		}
 		
 		try {
 			URL url = new URL(baseUrl + "tv/" + showId + "/season/" + seasonNumber + "/episode/" + episodeNumber + "?" + apiKey + baseLang);
@@ -281,13 +443,76 @@ public class ShowRepositoryImpl implements ShowRepository {
 			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-			episode = objectMapper.readValue(br, Episode.class);
+			episodeFetch = objectMapper.readValue(br, EpisodeFetch.class);
 			
+			if (watchedEpisodesIdList.contains(episodeFetch.getId())) {
+				isWatched = true;
+			}
+			episode = fromEpisodeFetchToEpisode(episodeFetch, isWatched);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
+		return episode;
+	}
+
+	@Override
+	public List<ShowCalendar> getPersonalCalendar(String userId) {
+		User user = userService.getUser(userId);
+		return null;
+	}
+	
+	private List<Integer> getWatchedEpisodesIdByShow(int showId, List<Episode> watchedEpisodesList) {
+		
+		List<Integer> watchedEpisodesIdByShow = new ArrayList<>();
+		for (Episode episode : watchedEpisodesList) {
+			if (episode.getShowId() == showId) {
+				watchedEpisodesIdByShow.add(episode.getEpisodeId());
+			}
+		}
+		
+		return watchedEpisodesIdByShow;
+	}
+	
+	private Show fromShowFetchToShow(ShowFetch showFetch, boolean followed, boolean favorite) {
+		Show show = new Show();
+		show.setId(showFetch.getId());
+		show.setName(showFetch.getName());
+		show.setFirstAirDate(showFetch.getFirst_air_date());
+		show.setOverview(showFetch.getOverview());
+		show.setPosterPath(showFetch.getPoster_path());
+		show.setVoteAverage(showFetch.getVote_average());
+		show.setFollowed(followed);
+		show.setFavorite(favorite);
+		return show;
+	}
+	
+	private ShowDetailed fromShowFetchToShowDetailed(ShowFetch showFetch, boolean followed, boolean favorite) {
+		ShowDetailed show = new ShowDetailed();
+		show.setId(showFetch.getId());
+		show.setName(showFetch.getName());
+		show.setFirstAirDate(showFetch.getFirst_air_date());
+		show.setOverview(showFetch.getOverview());
+		show.setPosterPath(showFetch.getPoster_path());
+		show.setVoteAverage(showFetch.getVote_average());
+		show.setNumberOfSeasons(showFetch.getNumber_of_seasons());
+		show.setFollowed(followed);
+		show.setFavorite(favorite);
+		return show;
+	}
+	
+	private Episode fromEpisodeFetchToEpisode(EpisodeFetch episodeFetch, boolean isWatched) {
+		Episode episode = new Episode();
+		episode.setEpisodeId(episodeFetch.getId());
+		episode.setShowId(episodeFetch.getShow_id());
+		episode.setEpisodeNumber(episodeFetch.getEpisode_number());
+		episode.setName(episodeFetch.getName());
+		episode.setSeasonNumber(episodeFetch.getSeason_number());
+		episode.setOverview(episodeFetch.getOverview());
+		episode.setStillPath(episodeFetch.getStill_path());
+		episode.setAirDate(episodeFetch.getAir_date());
+		episode.setWatched(isWatched);
 		return episode;
 	}
 	

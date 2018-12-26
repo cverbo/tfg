@@ -1,4 +1,4 @@
-package com.cverbo.tfg.model.mongo;
+package com.cverbo.tfg.model;
 
 	import java.util.Date;
 import java.util.List;
@@ -14,7 +14,7 @@ import lombok.Setter;
 	@Document(collection="users")
 	@JsonIgnoreProperties(value = {"createdAt"}, allowGetters = true)
 	@Getter @Setter
-	public class MongoUser {
+	public class User {
 	    @Id
 	    private String id;
 
@@ -24,11 +24,7 @@ import lombok.Setter;
 	    
 	    private String email;
 	    
-	    private String firstName;
-	    
-	    private String lastName;
-
-	    private Date birthDate;
+	    private String fullName;
 	    
 	    private String type = "USER";
 	    
@@ -36,10 +32,10 @@ import lombok.Setter;
 
 	    private Date createdAt = new Date();
 	    
-	    private List<MongoFollowedShow> followedShows;
+	    private List<Show> followedShows;
 	    
-	    private List<MongoWatchedEpisode> watchedEpisodes;
+	    private List<Episode> watchedEpisodes;
 	    
-	    private List<MongoFollowedUser> followedUsers;
+	    private List<User> followedUsers;
 
 }

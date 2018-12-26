@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class Show {
+public class ShowDetailed {
 	
 	private int id;
 	
@@ -23,5 +23,7 @@ public class Show {
 	private boolean followed;
 	
 	private boolean favorite;
+	
+	private int numberOfSeasons;
 
 }
