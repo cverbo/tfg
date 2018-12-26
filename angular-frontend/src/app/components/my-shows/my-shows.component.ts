@@ -10,7 +10,6 @@ import { AuthService } from '../../services/auth.service';
 export class MyShowsComponent implements OnInit {
 
   profile: any;
-
   user: User;
 
   constructor(private userService: UserService,

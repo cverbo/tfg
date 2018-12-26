@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../../services/user.service';
-import { Data } from '../../../services/data.service';
 import { User } from '../../../models/user';
 import { ActivatedRoute } from '@angular/router';
 import { ShowService } from '../../../services/show.service';
@@ -16,21 +14,21 @@ export class ShowSearchComponent implements OnInit {
   text: string;
   shows: Show[];
 
-  constructor ( private userService: UserService,
-                private data: Data,
-                private activatedRoute: ActivatedRoute,
+  constructor ( private activatedRoute: ActivatedRoute,
                 private showService: ShowService ) { }
 
   ngOnInit() {
+
+    this.user = JSON.parse(localStorage.getItem('user'));
+
     this.activatedRoute.params.subscribe( params => {
-      this.showService.searchShow( params['text'] )
+      this.showService.searchShow(this.user.id, params['text'] )
       .then(shows => {
         this.shows = shows;
         this.text = params['text'];
       });
     });
 
-    this.user = JSON.parse(localStorage.getItem('user'));
   }
 
 }

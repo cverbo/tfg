@@ -1,6 +1,12 @@
 <h1>Tus series <small>seguidas</small></h1>
 <hr>
-<div *ngIf="user" class="card-columns">
+<!-- <div *ngIf="user" class="card-columns">
     <app-show-card [origin]="'myshows'" [showId]="followedShow.showId" *ngFor="let followedShow of user.followedShows"></app-show-card>
 
+</div> -->
+<div *ngIf="user" class="card-columns">
+    <app-show-list [origin]="'myshows'" [shows]="user.followedShows"></app-show-list>
+</div>
+<div *ngIf="user && user.followedShows === null">
+    Todavía no sigues ninguna serie. Si quieres que te recomendemos alguna, utiliza la opción del menú "Recomendadas". ¡También puedes utilizar el buscador!
 </div>

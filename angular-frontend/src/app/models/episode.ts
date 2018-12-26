@@ -1,12 +1,13 @@
 export class Episode {
 
-    show_id: number;
-    id: number;
-    episode_number: number;
+    episodeId: number;
+    showId: number;
+    episodeNumber: number;
     name: string;
-    season_number: number;
+    seasonNumber: number;
     overview: string;
-    still_path: string;
-    air_date: Date;
+    stillPath: string;
+    airDate: Date;
+    watched: boolean;
 
 }

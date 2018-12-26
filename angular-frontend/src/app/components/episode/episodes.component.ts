@@ -23,39 +23,20 @@ export class EpisodesComponent implements OnInit {
                private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
+    this.user = JSON.parse(localStorage.getItem('user'));
+
     this.activatedRoute.params.subscribe( params => {
-      this.episodesService.getEpisodesAllSeasons( params['id'] )
+      this.episodesService.getEpisodesAllSeasons( this.user.id, params['id'] )
       .then(episodes => this.episodes = episodes);
-      this.showService.getShow( params['id'] )
+      this.showService.getShow( this.user.id, params['id'] )
       .then(show => this.show = show);
     });
-
-    this.user = JSON.parse(localStorage.getItem('user'));
   }
 
-  viewedEpisode(showId: number, seasonNumber: number, episodeNumber: number): boolean {
-    let watched =  false;
-    if (this.user.watchedEpisodes != null) {
-      this.user.watchedEpisodes.forEach(watchedEpisode => {
-        if (watchedEpisode.showId === showId && watchedEpisode.seasonNumber === seasonNumber && watchedEpisode.episodeNumber === episodeNumber) {
-          watched = true;
-        }
-      });
-    }
-    return watched;
-  }
-
-  markEpisodeAsWatched(showId: number, seasonNumber: number, episodeNumber: number): void {
-    let watched =  false;
-    if (this.user.watchedEpisodes != null) {
-      this.user.watchedEpisodes.forEach(watchedEpisode => {
-        if (watchedEpisode.showId === showId && watchedEpisode.seasonNumber === seasonNumber && watchedEpisode.episodeNumber === episodeNumber) {
-          watched = true;
-        }
-      });
-    }
-    if (!watched) {
-      this.episodesService.markEpisodeAsWatched(showId, seasonNumber, episodeNumber, this.user);
+  markEpisodeAsWatched(episode: Episode): void {
+    if (!episode.watched) {
+      episode.watched = true;
+      this.episodesService.markEpisodeAsWatched(episode, this.user);
       localStorage.setItem('user', JSON.stringify(this.user));
     }
   }

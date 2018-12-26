@@ -1,7 +1,10 @@
 export class Show {
     id: number;
     name: string;
-    first_air_date: Date;
+    firstAirDate: Date;
     overview: string;
-    poster_path: string;
+    posterPath: string;
+    voteAverage: number;
+    followed: boolean;
+    favorite: boolean;
 }

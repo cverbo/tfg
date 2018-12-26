@@ -1,7 +1,11 @@
 <h1 *ngIf="show"><small>Porque sigues </small>{{ show.name }}</h1>
+<h1 *ngIf="shows && !show">Populares. <small>No sigues niguna serie</small></h1>
 <hr>
-<div *ngIf="shows" class="card-columns">
+<!-- <div *ngIf="shows" class="card-columns">
 
     <app-show-card [origin]="'recommended'" [showId]="show.id" *ngFor="let show of shows"></app-show-card>
 
+</div> -->
+<div *ngIf="user" class="card-columns">
+    <app-show-list [origin]="'search'" [shows]="shows"></app-show-list>
 </div>

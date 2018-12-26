@@ -41,13 +41,13 @@ export class UserService {
       .catch(this.handleError);
   }
 
-  followedShowsIdList(user: User): number[] {
-    let ids: number[] = [];
-    user.followedShows.forEach(followedShow => {
-      ids.push(followedShow.showId);
-    });
-    return ids;
-  }
+  // followedShowsIdList(user: User): number[] {
+  //   let ids: number[] = [];
+  //   user.followedShows.forEach(followedShow => {
+  //     ids.push(followedShow.showId);
+  //   });
+  //   return ids;
+  // }
 
   newUser(profile: any): User {
     let newUser = new User();

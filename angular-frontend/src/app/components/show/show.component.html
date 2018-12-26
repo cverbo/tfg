@@ -1,16 +1,16 @@
-<h1 *ngIf="show">{{ show.name | uppercase }} <small>({{ show.first_air_date | date: 'y'}})</small></h1>
+<h1 *ngIf="show">{{ show.name | uppercase }} <small>({{ show.firstAirDate | date: 'y'}})</small></h1>
 <hr>
 
 <div *ngIf="show" class="row">
     <div class="col-md-4 animated fadeIn fast">
-        <img [src]="imgPath.concat(show.poster_path)" class="img-fluid" [alt]="show.name">
+        <img [src]="imgPath.concat(show.posterPath)" class="img-fluid" [alt]="show.name">
         <br><br>
-        <a [routerLink]="['/home']" class="btn btn-outline-primary btn-block">Volver</a>
-        <a *ngIf="!unfollowed" [routerLink]="['/episodes', show.id]" class="btn btn-outline-primary btn-block">Capítulos</a>
-        <button *ngIf="!unfollowed" (click)="unfollowShow()" type="button" class="btn btn-danger btn-block">
+        <a [routerLink]="['/my-shows']" class="btn btn-outline-primary btn-block">Volver</a>
+        <a *ngIf="show.followed" [routerLink]="['/episodes', show.id]" class="btn btn-outline-primary btn-block">Capítulos</a>
+        <button *ngIf="show.followed" (click)="unfollowShow()" type="button" class="btn btn-danger btn-block">
             Dejar de seguir
         </button>
-        <button *ngIf="unfollowed" type="button" class="btn btn-danger btn-block disabled">
+        <button *ngIf="!show.followed" type="button" class="btn btn-danger btn-block disabled">
             Se ha dejado de seguir
         </button>
     </div>

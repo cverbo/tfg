@@ -1,7 +1,10 @@
 <h1><small>Buscando </small>{{ this.text }}</h1>
 <hr>
-<div *ngIf="shows" class="card-columns">
+<!-- <div *ngIf="shows" class="card-columns">
 
     <app-show-card [origin]="'search'" [showId]="show.id" *ngFor="let show of shows"></app-show-card>
 
+</div> -->
+<div *ngIf="user" class="card-columns">
+    <app-show-list [origin]="'search'" [shows]="shows"></app-show-list>
 </div>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { RecommendedService } from '../../services/recommended.service';
 import { Show } from '../../models/show';
 import { User } from 'src/app/models/user';
+import { ShowService } from '../../services/show.service';
 
 @Component({
   selector: 'app-recommended',
@@ -13,20 +13,24 @@ export class RecommendedComponent implements OnInit {
   shows: Show[];
   user: User;
 
-  constructor( private recommendedService: RecommendedService) { }
+  constructor( private showService: ShowService) { }
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('user'));
     console.log(this.user.id);
-    this.getShows();
+    this.getRecommendedShows();
   }
 
-  getShows() {
-    this.recommendedService.getShows(this.user.id)
+  getRecommendedShows() {
+    this.showService.getRecommendedShows(this.user.id)
       .then(shows => {
         this.shows = shows;
-        this.show = this.shows[0];
-        this.shows = this.shows.slice(1, this.shows.length);
+        if (this.user.followedShows != null) {
+          this.show = this.shows[0];
+          this.shows = this.shows.slice(1, this.shows.length);
+        } else {
+          this.show = null;
+        }
       }
       );
   }
