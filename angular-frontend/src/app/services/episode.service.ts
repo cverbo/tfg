@@ -7,10 +7,11 @@ import { UserService } from './user.service';
 
 @Injectable()
 export class EpisodeService {
-    constructor( private http: Http,
-                 private userService: UserService ) { }
 
     private baseUrl = envvars.baseUrl;
+
+    constructor( private http: Http,
+                 private userService: UserService ) { }
 
     public getEpisodes(userId: string, showId: string, seasonNumber: number ): Promise<Episode[]> {
         return this.http.get(this.baseUrl + '/api/show/' + showId + '/episodes/' + seasonNumber + '?user=' + encodeURI(userId))
@@ -33,7 +34,7 @@ export class EpisodeService {
               .catch(this.handleError);
     }
 
-    public markEpisodeAsWatched(episode: Episode, user: User): void {
+    public markEpisodeAsWatched(episode: Episode, user: User): User {
         let weList: Episode[] = [];
 
         if (user.watchedEpisodes != null) {
@@ -42,8 +43,35 @@ export class EpisodeService {
         weList.push(episode);
         user.watchedEpisodes = weList;
         this.userService.updateUser(user);
+        return user;
     }
 
+    public markEpisodeAsUnwatched(episode: Episode, user: User): User {
+        let weList: Episode[] = [];
+
+        if (user.watchedEpisodes != null) {
+            weList = user.watchedEpisodes;
+        }
+
+        let index = 0;
+        let found = false;
+        let i = 0;
+        while ( i < weList.length && !found) {
+            if (episode.showId === weList[i].showId && episode.episodeId === weList[i].episodeId) {
+                index = i;
+                found = true;
+            }
+            i++;
+        }
+        if (found) {
+            weList.splice(index, 1);
+            user.watchedEpisodes = weList;
+            this.userService.updateUser(user);
+        }
+
+        return user;
+
+    }
 
     private handleError(error: any): Promise<any> {
       console.error('Some error occured', error);

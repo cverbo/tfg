@@ -7,6 +7,9 @@ import { EpisodesComponent } from './components/episode/episodes.component';
 import { ShowSearchComponent } from './components/show/show-search/show-search.component';
 import { AuthGuardService } from './services/auth-guard.service';
 import { MyShowsComponent } from './components/my-shows/my-shows.component';
+import { PersonalCalendarComponent } from './components/calendars/personal-calendar/personal-calendar.component';
+import { UserComponent } from './components/user/user.component';
+
 
 
 
@@ -18,6 +21,8 @@ const APP_ROUTES: Routes = [
     { path: 'show/:id', component: ShowComponent, canActivate: [AuthGuardService] },
     { path: 'episodes/:id', component: EpisodesComponent, canActivate: [AuthGuardService] },
     { path: 'show-search/:text', component: ShowSearchComponent, canActivate: [AuthGuardService] },
+    { path: 'personal-calendar', component: PersonalCalendarComponent, canActivate: [AuthGuardService] },
+    { path: 'user', component: UserComponent, canActivate: [AuthGuardService] },
     { path: '**', pathMatch: 'full', redirectTo: 'home' }
 ];
 

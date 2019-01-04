@@ -14,6 +14,8 @@ import { EpisodeService } from './services/episode.service';
 import { AuthService } from './services/auth.service';
 import { ShowService } from './services/show.service';
 import { AuthGuardService } from './services/auth-guard.service';
+import { CalendarService } from './services/calendar.service';
+
 
 // Componentes
 import { AppComponent } from './app.component';
@@ -28,6 +30,7 @@ import { EpisodesComponent } from './components/episode/episodes.component';
 import { ShowSearchComponent } from './components/show/show-search/show-search.component';
 import { MyShowsComponent } from './components/my-shows/my-shows.component';
 import { ShowListComponent } from './components/show/show-list/show-list.component';
+import { PersonalCalendarComponent } from './components/calendars/personal-calendar/personal-calendar.component';
 
 
 @NgModule({
@@ -43,7 +46,8 @@ import { ShowListComponent } from './components/show/show-list/show-list.compone
     EpisodesComponent,
     ShowSearchComponent,
     MyShowsComponent,
-    ShowListComponent
+    ShowListComponent,
+    PersonalCalendarComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +62,8 @@ import { ShowListComponent } from './components/show/show-list/show-list.compone
     EpisodeService,
     {provide: LocationStrategy, useClass: HashLocationStrategy},
     AuthService,
-    AuthGuardService
+    AuthGuardService,
+    CalendarService
   ],
   bootstrap: [AppComponent]
 })

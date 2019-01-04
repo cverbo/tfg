@@ -1,5 +1,8 @@
-<h1><small>Bienvenido a</small> SeriesPro</h1>
+<h1><small>Bienvenido a</small> SeriesPro <small *ngIf="profile">{{ user.userName }}</small></h1>
 <hr>
-<div>
+<div *ngIf="!profile">
     Accede con tu usuario y contraseña o crea tu cuenta pulsando el botón entrar de la parte superior derecha de la pantalla.
+</div>
+<div *ngIf="profile">
+    Consulta tu series seguidas, favoritas y el calendario de los próximos capítulos que tienes pendientes. ¡También te podemos recomendar series interesantes!
 </div>

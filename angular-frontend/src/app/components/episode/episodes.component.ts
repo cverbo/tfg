@@ -33,11 +33,15 @@ export class EpisodesComponent implements OnInit {
     });
   }
 
-  markEpisodeAsWatched(episode: Episode): void {
+  markEpisodeAsWatchedOrUnwatched(episode: Episode): void {
     if (!episode.watched) {
-      episode.watched = true;
-      this.episodesService.markEpisodeAsWatched(episode, this.user);
+      this.user = this.episodesService.markEpisodeAsWatched(episode, this.user);
       localStorage.setItem('user', JSON.stringify(this.user));
+      episode.watched = true;
+    } else {
+      this.user = this.episodesService.markEpisodeAsUnwatched(episode, this.user);
+      localStorage.setItem('user', JSON.stringify(this.user));
+      episode.watched = false;
     }
   }
 

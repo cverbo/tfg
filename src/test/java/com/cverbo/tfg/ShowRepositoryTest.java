@@ -10,7 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.cverbo.tfg.model.Episode;
+import com.cverbo.tfg.model.NextEpisode;
 import com.cverbo.tfg.model.Show;
+import com.cverbo.tfg.model.ShowCalendar;
 import com.cverbo.tfg.repository.impl.ShowRepositoryImpl;
 
 @RunWith(SpringRunner.class)
@@ -24,6 +26,20 @@ public class ShowRepositoryTest {
 	
 	@Autowired
 	ShowRepositoryImpl showRepository;
+	
+	@Test
+	public void getPersonalCalendarTest() {
+		
+		List<ShowCalendar> showCalendarList = showRepository.getPersonalCalendar(USERID);
+		for (ShowCalendar showCalendar : showCalendarList) {
+			System.out.println("-----------FECHA: " + showCalendar.getDate() + " -----------");
+			for (NextEpisode nextEpisode : showCalendar.getNextEpisodes()) {
+				System.out.println("-SERIE: " + nextEpisode.getShow().getName());
+				System.out.println("-EPISODIO: " + nextEpisode.getEpisode().getSeasonNumber() + "x" + nextEpisode.getEpisode().getEpisodeNumber());
+			}
+		}
+		
+	}
 
 	@Test
 	@Ignore

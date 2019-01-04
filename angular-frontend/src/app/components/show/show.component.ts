@@ -15,6 +15,8 @@ export class ShowComponent  implements OnInit {
   user: User;
   show: Show;
   imgPath = envvars.imgPath;
+  defaultImgPath = envvars.defaultImgPath;
+  favoriteImgPath = envvars.favoriteImgPath;
 
   constructor( private activatedRoute: ActivatedRoute,
                private showService: ShowService,
@@ -39,6 +41,22 @@ export class ShowComponent  implements OnInit {
       }
     }
     this.user.followedShows = followedShows;
+    this.userService.updateUser(this.user);
+    localStorage.setItem('user', JSON.stringify(this.user));
+  }
+
+  favoriteShow(favorite: boolean) {
+    this.show.favorite = favorite;
+    let followedShows = this.user.followedShows;
+    let followedShowsUpdated: Show[] = [];
+    for (let i = 0; i < followedShows.length; i++) {
+      let followedShow = followedShows[i];
+      if (followedShow.id === this.show.id) {
+        followedShow.favorite = favorite;
+      }
+      followedShowsUpdated.push(followedShow);
+    }
+    this.user.followedShows = followedShowsUpdated;
     this.userService.updateUser(this.user);
     localStorage.setItem('user', JSON.stringify(this.user));
   }

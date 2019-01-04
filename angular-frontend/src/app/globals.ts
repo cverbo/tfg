@@ -2,6 +2,7 @@ import { environment } from '../environments/environment';
 
 export const imgPath = 'https://image.tmdb.org/t/p/w500/';
 export const defaultImgPath = 'assets/img/img-not-found.jpg';
+export const favoriteImgPath = 'assets/img/favorite.png';
 export const baseUrl = '';
 let uri: string;
 if (!environment.production) {

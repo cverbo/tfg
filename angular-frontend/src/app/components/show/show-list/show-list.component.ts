@@ -15,6 +15,7 @@ export class ShowListComponent implements OnInit {
   @Input() origin: string;
   imgPath = envvars.imgPath;
   defaultImgPath = envvars.defaultImgPath;
+  favoriteImgPath = envvars.favoriteImgPath;
   user: User;
 
   constructor( private router: Router,

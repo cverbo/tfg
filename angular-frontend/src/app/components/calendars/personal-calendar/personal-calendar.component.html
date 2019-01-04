@@ -1,0 +1,42 @@
+<div *ngIf="!showCalendars">
+    <h1>Calculando calendario...</h1>
+    <i class="fa fa-circle-o-notch fa-spin loading"></i>
+</div>
+<div *ngFor="let showCalendar of showCalendars">
+
+    <h3><small>Emisión el </small> {{ showCalendar.date | date:'dd/MM/yyyy' }}</h3>
+    <hr>
+
+    <div *ngIf="showCalendar.nextEpisodes" class="card-columns">
+
+        <div *ngFor="let nextEpisode of showCalendar.nextEpisodes" class="card animated fadeIn fast">
+
+            <div class="container-fluid text-center">
+                <img *ngIf="nextEpisode.show.posterPath != null" class="card-img-top" [src]="imgPath.concat(nextEpisode.show.posterPath)" [alt]="nextEpisode.show.name">
+                <img *ngIf="nextEpisode.show.posterPath === null" class="card-img-top" [src]="defaultImgPath" [alt]="nextEpisode.show.name">
+                <img *ngIf="nextEpisode.show.favorite" class="img-responsive img-circle img-favorite" [src]="favoriteImgPath" alt="Favorito">
+            </div>
+
+            <div class="card-body">
+                <h5 class="card-title">{{ getEpisodeText(nextEpisode) }}</h5>
+                <p class="card-text">{{ nextEpisode.episode.overview }}</p>
+
+                <button (click)="showShow(nextEpisode.show.id)" type="button" class="btn btn-outline-primary btn-block">
+                  Ver más...
+                </button>
+
+                <button *ngIf="!nextEpisode.episode.watched" (click)="markEpisodeAsWatched(nextEpisode.episode)" type="button" class="btn btn-outline-primary btn-block">
+                  Marcar como visto
+                </button>
+
+                <button *ngIf="nextEpisode.episode.watched" type="button" class="btn btn-success btn-block disabled">
+                    Visto
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

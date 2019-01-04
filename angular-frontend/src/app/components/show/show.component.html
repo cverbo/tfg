@@ -3,10 +3,20 @@
 
 <div *ngIf="show" class="row">
     <div class="col-md-4 animated fadeIn fast">
-        <img [src]="imgPath.concat(show.posterPath)" class="img-fluid" [alt]="show.name">
+        <div class="container-fluid text-center">
+            <img *ngIf="show.posterPath != null" class="img-fluid" [src]="imgPath.concat(show.posterPath)" [alt]="show.name">
+            <img *ngIf="show.posterPath === null" class="img-fluid" [src]="defaultImgPath" [alt]="show.name">
+            <img *ngIf="show.favorite" class="img-responsive img-circle img-favorite" [src]="favoriteImgPath" alt="Favorito">
+        </div>
         <br><br>
         <a [routerLink]="['/my-shows']" class="btn btn-outline-primary btn-block">Volver</a>
         <a *ngIf="show.followed" [routerLink]="['/episodes', show.id]" class="btn btn-outline-primary btn-block">Capítulos</a>
+        <button *ngIf="show.followed && !show.favorite" (click)="favoriteShow(true)" type="button" class="btn btn-outline-primary btn-block">
+            Marcar como favorita
+        </button>
+        <button *ngIf="show.followed && show.favorite" (click)="favoriteShow(false)" type="button" class="btn btn-outline-primary btn-block">
+            Desmarcar como favorita
+        </button>
         <button *ngIf="show.followed" (click)="unfollowShow()" type="button" class="btn btn-danger btn-block">
             Dejar de seguir
         </button>

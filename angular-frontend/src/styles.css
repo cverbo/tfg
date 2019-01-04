@@ -2,6 +2,18 @@ body {
     padding-bottom: 50px;
 }
 
+.container-fluid {
+    position: relative;
+}
+
+.img-favorite {
+    position: absolute;
+    width: 50px;
+    top: 10%;
+    left: 80%;
+    transform: translate(-10%, -80%);
+}
+
 .main-container {
     margin-top: 20px;
 }
@@ -21,7 +33,19 @@ footer {
     width: 100%;
 }
 
+.loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -50px;
+    width: 100px;
+    height: 100px;
+    font-size: 96px;
+    color: blue;
+}
 
+​
 /* Animaciones */
 
 .animated {

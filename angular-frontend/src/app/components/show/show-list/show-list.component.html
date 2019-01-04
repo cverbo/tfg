@@ -2,8 +2,11 @@
 
 <div *ngFor="let show of shows" class="card animated fadeIn fast">
 
-    <img *ngIf="show.posterPath != null" class="card-img-top" [src]="imgPath.concat(show.posterPath)" [alt]="show.name">
-    <img *ngIf="show.posterPath === null" class="card-img-top" [src]="defaultImgPath" [alt]="show.name">
+    <div class="container-fluid text-center">
+        <img *ngIf="show.posterPath != null" class="card-img-top" [src]="imgPath.concat(show.posterPath)" [alt]="show.name">
+        <img *ngIf="show.posterPath === null" class="card-img-top" [src]="defaultImgPath" [alt]="show.name">
+        <img *ngIf="show.favorite" class="img-responsive img-circle img-favorite" [src]="favoriteImgPath" alt="Favorito">
+    </div>
 
     <div class="card-body">
         <h5 class="card-title">{{ show.name }}</h5>

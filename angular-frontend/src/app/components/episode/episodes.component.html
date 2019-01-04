@@ -4,7 +4,7 @@
 <hr>
 
 <div *ngIf="episodes" class="list-group">
-    <a (click)="markEpisodeAsWatched(episode)" style="cursor: pointer;" *ngFor="let episode of episodes" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+    <a (click)="markEpisodeAsWatchedOrUnwatched(episode)" style="cursor: pointer;" *ngFor="let episode of episodes" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
         {{ episode.seasonNumber + 'x' + episode.episodeNumber + ' - ' + episode.name }}
         <span *ngIf="episode.watched" class="badge badge-success badge-pill">Visto</span>
         <span *ngIf="!episode.watched" class="badge badge-danger badge-pill">Pdte.</span>

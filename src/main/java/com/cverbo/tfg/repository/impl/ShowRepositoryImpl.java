@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.cverbo.tfg.model.Episode;
+import com.cverbo.tfg.model.NextEpisode;
 import com.cverbo.tfg.model.Show;
 import com.cverbo.tfg.model.ShowCalendar;
 import com.cverbo.tfg.model.ShowDetailed;
@@ -69,7 +72,14 @@ public class ShowRepositoryImpl implements ShowRepository {
 				conn.setRequestProperty("Accept", "application/json");
 				conn.connect();
 				
-				if (conn.getResponseCode() != 200) {
+				if (conn.getResponseCode() == 429) {
+//					try {
+//						Thread.sleep(1000);
+						return getRecommended(userId);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+				} else if (conn.getResponseCode() != 200) {
 					throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
 				}
 				
@@ -120,7 +130,14 @@ public class ShowRepositoryImpl implements ShowRepository {
 			conn.setRequestProperty("Accept", "application/json");
 			conn.connect();
 			
-			if (conn.getResponseCode() != 200) {
+			if (conn.getResponseCode() == 429) {
+//				try {
+//					Thread.sleep(1000);
+					return getPopular(userId);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+			} else if (conn.getResponseCode() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
 			}
 			
@@ -174,7 +191,14 @@ public class ShowRepositoryImpl implements ShowRepository {
 			conn.setRequestProperty("Accept", "application/json");
 			conn.connect();
 			
-			if (conn.getResponseCode() != 200) {
+			if (conn.getResponseCode() == 429) {
+//				try {
+//					Thread.sleep(1000);
+					return getShow(userId, showId);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+			} else if (conn.getResponseCode() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
 			}
 			
@@ -229,7 +253,14 @@ public class ShowRepositoryImpl implements ShowRepository {
 			conn.setRequestProperty("Accept", "application/json");
 			conn.connect();
 			
-			if (conn.getResponseCode() != 200) {
+			if (conn.getResponseCode() == 429) {
+//				try {
+//					Thread.sleep(1000);
+					return getShowDetailed(userId, showId);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+			} else if (conn.getResponseCode() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
 			}
 			
@@ -279,7 +310,14 @@ public class ShowRepositoryImpl implements ShowRepository {
 			conn.setRequestProperty("Accept", "application/json");
 			conn.connect();
 			
-			if (conn.getResponseCode() != 200) {
+			if (conn.getResponseCode() == 429) {
+//				try {
+//					Thread.sleep(1000);
+					return searchShow(userId, text);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+			} else if (conn.getResponseCode() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
 			}
 			
@@ -335,7 +373,14 @@ public class ShowRepositoryImpl implements ShowRepository {
 				conn.setRequestProperty("Accept", "application/json");
 				conn.connect();
 				
-				if (conn.getResponseCode() != 200) {
+				if (conn.getResponseCode() == 429) {
+//					try {
+//						Thread.sleep(1000);
+						return getEpisodesAllSeasons(userId, showId);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+				} else if (conn.getResponseCode() != 200) {
 					throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
 				}
 				
@@ -384,7 +429,14 @@ public class ShowRepositoryImpl implements ShowRepository {
 			conn.setRequestProperty("Accept", "application/json");
 			conn.connect();
 			
-			if (conn.getResponseCode() != 200) {
+			if (conn.getResponseCode() == 429) {
+//				try {
+//					Thread.sleep(1000);
+					return getEpisodes(userId, showId, seasonNumber);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+			} else if (conn.getResponseCode() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
 			}
 			
@@ -434,7 +486,14 @@ public class ShowRepositoryImpl implements ShowRepository {
 			conn.setRequestProperty("Accept", "application/json");
 			conn.connect();
 			
-			if (conn.getResponseCode() != 200) {
+			if (conn.getResponseCode() == 429) {
+//				try {
+//					Thread.sleep(1000);
+					return getEpisode(userId, showId, seasonNumber, episodeNumber);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+			} else if (conn.getResponseCode() != 200) {
 				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
 			}
 			
@@ -460,19 +519,36 @@ public class ShowRepositoryImpl implements ShowRepository {
 	@Override
 	public List<ShowCalendar> getPersonalCalendar(String userId) {
 		User user = userService.getUser(userId);
-		return null;
-	}
-	
-	private List<Integer> getWatchedEpisodesIdByShow(int showId, List<Episode> watchedEpisodesList) {
+		Map<Date, List<NextEpisode>> nextEpisodesMap = new HashMap<>();
 		
-		List<Integer> watchedEpisodesIdByShow = new ArrayList<>();
-		for (Episode episode : watchedEpisodesList) {
-			if (episode.getShowId() == showId) {
-				watchedEpisodesIdByShow.add(episode.getEpisodeId());
+		List<Show> followedShowsList = user.getFollowedShows();
+		for (Show followedShow : followedShowsList) {
+			List<Episode> episodesList = getEpisodesAllSeasons(userId, followedShow.getId());
+			boolean found = false;
+			for (Episode episode : episodesList) {
+				if (!found) {
+					if(!episode.isWatched()) {
+						found = true;
+						NextEpisode nextEpisode = new NextEpisode(followedShow, episode);
+						List<NextEpisode> nextEpisodeList = nextEpisodesMap.get(episode.getAirDate());
+						if(nextEpisodeList == null) {
+							nextEpisodeList = new ArrayList<>();
+						}
+						nextEpisodeList.add(nextEpisode);
+						nextEpisodesMap.put(episode.getAirDate(), nextEpisodeList);
+					}
+				}
 			}
 		}
 		
-		return watchedEpisodesIdByShow;
+		List<ShowCalendar> showCalendarList = new ArrayList<>();
+		for (Date date : nextEpisodesMap.keySet()) {
+			ShowCalendar showCalendar = new ShowCalendar(date, nextEpisodesMap.get(date));
+			showCalendarList.add(showCalendar);
+		}
+		
+		Collections.sort(showCalendarList);
+		return showCalendarList; 
 	}
 	
 	private Show fromShowFetchToShow(ShowFetch showFetch, boolean followed, boolean favorite) {

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cverbo.tfg.model.Episode;
 import com.cverbo.tfg.model.Show;
+import com.cverbo.tfg.model.ShowCalendar;
 import com.cverbo.tfg.repository.impl.ShowRepositoryImpl;
 
 @RestController
@@ -57,6 +58,11 @@ public class ShowControler {
 	@GetMapping(value="/show/{id}/season/{season_number}/episode/{episode_number}")
     public Episode getEpisode(@RequestParam("user") String userId, @PathVariable("id") Integer showId, @PathVariable("season_number") Integer seasonNumber, @PathVariable("episode_number") Integer episodeNumber) {
         return showRepository.getEpisode(userId, showId, seasonNumber, episodeNumber);
+    }
+	
+	@GetMapping("/calendar/personal")
+    public List<ShowCalendar> getPersonalCalendar(@RequestParam("user") String userId) {
+        return showRepository.getPersonalCalendar(userId);
     }
 
 }
