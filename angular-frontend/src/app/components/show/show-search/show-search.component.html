@@ -6,5 +6,6 @@
 
 </div> -->
 <div *ngIf="user" class="card-columns">
-    <app-show-list [origin]="'search'" [shows]="shows"></app-show-list>
+    <app-show-list *ngIf="shows" [origin]="'search'" [shows]="shows"></app-show-list>
 </div>
+<div *ngIf="shows && shows.length === 0">No se ha encontrado ningún resultado para la búsqueda realizada.</div>

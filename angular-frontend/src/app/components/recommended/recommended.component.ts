@@ -17,7 +17,6 @@ export class RecommendedComponent implements OnInit {
 
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('user'));
-    console.log(this.user.id);
     this.getRecommendedShows();
   }
 
@@ -25,7 +24,7 @@ export class RecommendedComponent implements OnInit {
     this.showService.getRecommendedShows(this.user.id)
       .then(shows => {
         this.shows = shows;
-        if (this.user.followedShows != null) {
+        if (this.user.followedShows.length > 0) {
           this.show = this.shows[0];
           this.shows = this.shows.slice(1, this.shows.length);
         } else {

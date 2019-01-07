@@ -31,8 +31,14 @@ export class ShowComponent  implements OnInit {
     });
   }
 
+  followShow(show: Show) {
+    this.user = this.showService.followShow(show, this.user);
+    localStorage.setItem('user', JSON.stringify(this.user));
+  }
+
   unfollowShow() {
     this.show.followed = false;
+    this.show.favorite = false;
     let followedShows = this.user.followedShows;
     for (let i = 0; i < followedShows.length; i++) {
       let followedShow = followedShows[i];

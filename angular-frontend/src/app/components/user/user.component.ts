@@ -14,7 +14,6 @@ export class UserComponent implements OnInit {
   constructor( private auth: AuthService ) { }
 
   ngOnInit() {
-    console.log(this.auth.userProfile);
     this.profile = this.auth.userProfile;
     this.user = JSON.parse(localStorage.getItem('user'));
   }

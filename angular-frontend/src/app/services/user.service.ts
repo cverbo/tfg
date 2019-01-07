@@ -15,13 +15,6 @@ export class UserService {
       .catch(this.handleError);
   }
 
-  getUsers():  Promise<User[]> {
-    return this.http.get(this.baseUrl + '/api/users/')
-      .toPromise()
-      .then(response => response.json() as User[])
-      .catch(this.handleError);
-  }
-
   createUser(userData: User): Promise<User> {
     return this.http.post(this.baseUrl + '/api/users/', userData)
       .toPromise().then(response => response.json() as User)
@@ -40,14 +33,6 @@ export class UserService {
       .toPromise()
       .catch(this.handleError);
   }
-
-  // followedShowsIdList(user: User): number[] {
-  //   let ids: number[] = [];
-  //   user.followedShows.forEach(followedShow => {
-  //     ids.push(followedShow.showId);
-  //   });
-  //   return ids;
-  // }
 
   newUser(profile: any): User {
     let newUser = new User();

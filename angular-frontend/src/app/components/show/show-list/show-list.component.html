@@ -11,9 +11,9 @@
     <div class="card-body">
         <h5 class="card-title">{{ show.name }}</h5>
         <p class="card-text">{{ show.overview }}</p>
-        <p class="card-text"><small class="text-muted">{{ show.firstAirDate | date: 'shortDate' }}</small></p>
+        <p class="card-text"><small class="text-muted">{{ show.firstAirDate | date: 'dd/MM/yyyy' }}</small></p>
 
-        <button *ngIf="origin==='myshows'" (click)="showShow(show.id)" type="button" class="btn btn-outline-primary btn-block">
+        <button (click)="showShow(show.id)" type="button" class="btn btn-outline-primary btn-block">
             Ver más...
         </button>
 

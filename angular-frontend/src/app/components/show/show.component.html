@@ -9,7 +9,6 @@
             <img *ngIf="show.favorite" class="img-responsive img-circle img-favorite" [src]="favoriteImgPath" alt="Favorito">
         </div>
         <br><br>
-        <a [routerLink]="['/my-shows']" class="btn btn-outline-primary btn-block">Volver</a>
         <a *ngIf="show.followed" [routerLink]="['/episodes', show.id]" class="btn btn-outline-primary btn-block">Capítulos</a>
         <button *ngIf="show.followed && !show.favorite" (click)="favoriteShow(true)" type="button" class="btn btn-outline-primary btn-block">
             Marcar como favorita
@@ -20,8 +19,8 @@
         <button *ngIf="show.followed" (click)="unfollowShow()" type="button" class="btn btn-danger btn-block">
             Dejar de seguir
         </button>
-        <button *ngIf="!show.followed" type="button" class="btn btn-danger btn-block disabled">
-            Se ha dejado de seguir
+        <button *ngIf="!show.followed" (click)="followShow(show)" type="button" class="btn btn-outline-primary btn-block">
+            Seguir
         </button>
     </div>
 
