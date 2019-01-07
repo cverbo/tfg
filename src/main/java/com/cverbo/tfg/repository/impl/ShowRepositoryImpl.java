@@ -374,12 +374,7 @@ public class ShowRepositoryImpl implements ShowRepository {
 				conn.connect();
 				
 				if (conn.getResponseCode() == 429) {
-//					try {
-//						Thread.sleep(1000);
-						return getEpisodesAllSeasons(userId, showId);
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
+					return getEpisodesAllSeasons(userId, showId);
 				} else if (conn.getResponseCode() != 200) {
 					throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
 				}
